@@ -13,7 +13,33 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>161</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>DBMS</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>10</y>
+      <width>601</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -29,6 +55,7 @@
     </property>
     <addaction name="actioncha"/>
     <addaction name="actionrizhi"/>
+    <addaction name="actionsave"/>
     <addaction name="actionquit"/>
    </widget>
    <widget class="QMenu" name="menu_K">
@@ -182,6 +209,11 @@
   <action name="actiongy">
    <property name="text">
     <string>关于MyDBMS...</string>
+   </property>
+  </action>
+  <action name="actionsave">
+   <property name="text">
+    <string>保存(S)</string>
    </property>
   </action>
  </widget>
