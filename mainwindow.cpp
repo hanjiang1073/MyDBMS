@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     createTreeWidget();
     lf=new LoginFrame();
     lf->show();
-    connect(lf,SIGNAL(login()),this,SLOT(show()));
+    connect(lf,SIGNAL(login(QString)),this,SLOT(initall(QString)));
 
 }
 
@@ -30,6 +30,13 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);
 }
 
+//根据当前用户初始化所有信息
+void MainWindow::initall(QString name){
+    this->user=name;
+    //TODO根据user名加载出这个用户已经存在的库、表、记录
+
+    this->show();
+}
 
 //退出按钮槽函数
 void MainWindow::on_actionExit_triggered()
@@ -59,10 +66,6 @@ void MainWindow::createTreeWidget(){
     //Item点击事件的连接
     connect(ui->treeWidget,SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),this,SLOT(slotDoubleClickItem(QTreeWidgetItem *, int)));
     connect(ui->treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this,SLOT(slotClickItem(QTreeWidgetItem*,int)));
-
-    //这里之后写该用户已有数据库的自动载入
-
-
 }
 
 //新建库槽函数
@@ -93,6 +96,7 @@ void MainWindow::on_actionCrd_triggered(){
     if(this->biaoItem!=NULL){
         td=new TableDesign();
         td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
+        td->user=this->user;
         td->show();
         showTableWidget();
 
@@ -106,13 +110,14 @@ void MainWindow::on_actionCrj_triggered(){
     if(this->biaoItem!=NULL){
         ri=new RecordInsert();
         ri->biaoItem=this->biaoItem;
+        ri->user=this->user;
         ri->show();
     }else{
         QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请先选择表!"));
     }
 }
 
-//TreeWidgetItem双击改名
+//TreeWidgetItem(库表)双击改名
 void MainWindow::slotDoubleClickItem(QTreeWidgetItem *item, int col) {
     doubleClickItem = nullptr;
     if(hasht[item]==1){
@@ -127,7 +132,7 @@ void MainWindow::slotDoubleClickItem(QTreeWidgetItem *item, int col) {
     }
 }
 
-//改名结束
+//(库表)改名结束
 void MainWindow::slotFinishEdit(){
     if (doubleClickItem != nullptr) {
         QLineEdit *edit = qobject_cast<QLineEdit*>(ui->treeWidget->itemWidget(doubleClickItem, 0));
@@ -139,10 +144,12 @@ void MainWindow::slotFinishEdit(){
         if(text==""){
             QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请输入名称"));
         }else{
-            //这里应该将名称记录到对应数据字典中(在数据字典中无同名数据库的情况下，这个同名的检索时间充裕做)
+
+
             doubleClickItem->setText(0, text);
             QMessageBox::StandardButton button;
             button = QMessageBox::question(this, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
+            //TODO这里应该将名称记录到对应数据字典中(在数据字典中无同名的情况下，如果同名则提示失败)
         }
         hasht[doubleClickItem]=1;
     }
@@ -187,5 +194,5 @@ void MainWindow::showTableWidget(){
     ui->tableWidget->setHorizontalHeaderItem(8,new QTableWidgetItem(QString::fromLocal8Bit("非空")));
     ui->tableWidget->setHorizontalHeaderItem(9,new QTableWidgetItem(QString::fromLocal8Bit("注释")));
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    //下面读取字段信息
+    //TODO下面读取字段信息
 }

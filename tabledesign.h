@@ -17,6 +17,7 @@ public:
     explicit TableDesign(QWidget *parent = nullptr);
     ~TableDesign();
     void connection();
+    QString user;//当前用户
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
 private:

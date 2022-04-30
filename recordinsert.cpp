@@ -26,7 +26,7 @@ void RecordInsert::initTableWidget(){
     ui->tableWidget->setHorizontalHeaderItem(6,new QTableWidgetItem(QString::fromLocal8Bit("值")));
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    //通过biaoItem读取这张表的字段信息
+    //TODO通过biaoItem读取这张表的字段信息
     if(1){
 
     }else{
@@ -38,9 +38,9 @@ void RecordInsert::initTableWidget(){
 //确认按钮
 void RecordInsert::on_button_confirm(){
     int flag=1;//不妨用1表示合法，2,3,4...表示违反了什么错误，例如2表示违反了主键约束
-    //确认主键、最小值最大值唯一性非空性是否满足
+    //TODU读取文件确认主键、最小值最大值唯一性非空性是否满足
     if(flag==1){
-        //写入文件
+        //TODO写入文件
 
         this->close();
     }else{
@@ -50,4 +50,10 @@ void RecordInsert::on_button_confirm(){
                 break;
         }
     }
+}
+
+//重置按钮
+void RecordInsert::on_button_reset(){
+    int row=ui->tableWidget->rowCount();//首先获取有多少行然后每个行一个个删
+
 }

@@ -16,6 +16,7 @@ class RecordInsert : public QWidget
 public:
     explicit RecordInsert(QWidget *parent = nullptr);
     ~RecordInsert();
+    QString user;//当前用户
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
     void initTableWidget();
@@ -23,6 +24,7 @@ private:
     Ui::RecordInsert *ui;
 private slots:
     void on_button_confirm();
+    void on_button_reset();
 };
 
 #endif // RECORDINSERT_H

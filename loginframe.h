@@ -19,7 +19,7 @@ public:
     void readUsers();
     void writeUsers();
 signals:
-    void login();
+    void login(QString);
     void closeframe();
 private:
     Ui::LoginFrame *ui;
@@ -30,7 +30,7 @@ public slots:
     void btn_reset_clicked();//重置按钮
     void btn_login_clicked();//登入按钮
     void btn_regist_clicked();//注册按钮
-    void reg_login();//注册的登入（用于传递信号）
+    void reg_login(QString);//注册的登入（用于传递信号）
 };
 
 #endif // LOGINFRAME_H

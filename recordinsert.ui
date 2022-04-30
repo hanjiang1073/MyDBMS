@@ -87,8 +87,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>resetButton</sender>
+   <signal>clicked()</signal>
+   <receiver>RecordInsert</receiver>
+   <slot>on_button_reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>390</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>466</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>on_button_confirm()</slot>
+  <slot>on_button_reset()</slot>
  </slots>
 </ui>

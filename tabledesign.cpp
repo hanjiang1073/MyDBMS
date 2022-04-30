@@ -53,10 +53,11 @@ void TableDesign::on_comboBox_CIC(const QString &arg){
 //确认
 void TableDesign::on_button_confirm(){
     //除了字段名称不为空其余都可为空（字段类型是combobox没有空值）
+    //TODO需要判断是否同名
     if(ui->nameEdit->text()==""){
         QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("字段名称不能为空！"));
     }else{
-        //将字段信息写入文件,属性biaoItem指向的是插入字段的那张表存的时候需要使用
+        //TODO将字段信息写入文件,根据属性user，biaoItem指向的是插入字段的那张表存的时候需要使用
 
         //关闭窗口
         this->close();

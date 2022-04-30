@@ -34,6 +34,7 @@ public:
     void showTableWidget();
 private:
     Ui::MainWindow *ui;
+    QString user;//当前用户
     LoginFrame *lf;//登入窗口
     TableDesign *td;//字段设计窗口
     RecordInsert *ri;//记录窗口
@@ -51,5 +52,6 @@ private slots:
     void slotClickItem(QTreeWidgetItem *item,int col);//单击事件
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
+    void initall(QString name);
 };
 #endif // MAINWINDOW_H
