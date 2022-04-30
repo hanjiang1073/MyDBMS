@@ -12,17 +12,23 @@ SOURCES += \
     loginframe.cpp \
     main.cpp \
     mainwindow.cpp \
-    registframe.cpp
+    recordinsert.cpp \
+    registframe.cpp \
+    tabledesign.cpp
 
 HEADERS += \
     loginframe.h \
     mainwindow.h \
-    registframe.h
+    recordinsert.h \
+    registframe.h \
+    tabledesign.h
 
 FORMS += \
     loginframe.ui \
     mainwindow.ui \
-    registframe.ui
+    recordinsert.ui \
+    registframe.ui \
+    tabledesign.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

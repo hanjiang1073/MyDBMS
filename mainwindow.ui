@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1132</width>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
      <rect>
       <x>180</x>
       <y>10</y>
-      <width>601</width>
+      <width>941</width>
       <height>511</height>
      </rect>
     </property>
@@ -45,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1132</width>
      <height>26</height>
     </rect>
    </property>
@@ -86,7 +86,7 @@
    </widget>
    <widget class="QMenu" name="menu_Q">
     <property name="title">
-     <string>查询(Q)</string>
+     <string>记录(R)</string>
     </property>
     <addaction name="actiontjc"/>
     <addaction name="actioncrj"/>
