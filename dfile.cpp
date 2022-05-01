@@ -1,4 +1,4 @@
-#include "dfile.h"
+﻿#include "dfile.h"
 
 //对数据库文件进行操作的类
 DFile::DFile()
@@ -25,7 +25,7 @@ int DFile::createDataBase(QString baseName,QString username)
        bool dbo= dbf.open(QIODevice::ReadWrite);
        bool logo = logf.open(QIODevice::ReadWrite);
 
-       if(!dbo or !logo){
+       if(!dbo || !logo){
            dbf.close();
            logf.close();
            return 1;
@@ -47,6 +47,7 @@ bool DFile::initialDataBase()
 {
 
     QDir dir0("D:/MyDataBase");
+    qDebug()<<dir0.exists()<<"here";
     if(!dir0.exists()){
         dir0.mkdir("D:/MyDataBase");
     }
@@ -65,7 +66,7 @@ bool DFile::initialDataBase()
        bool ufo = userf.open(QIODevice::ReadWrite);
 
 
-       if(!dbo or !logo or !ufo ){
+       if(!dbo || !logo || !ufo ){
 
            return false;
        }

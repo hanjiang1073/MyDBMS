@@ -1,9 +1,10 @@
-#ifndef DFILE_H
+﻿#ifndef DFILE_H
 #define DFILE_H
-#include<qstring.h>
+#include <QString>
 #include<QDir>
 #include<QFile>
-
+#include <QDataStream>
+#include <QDebug>
 //对数据库文件进行操作的类
 
 class DFile

@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     lf=new LoginFrame();
     lf->show();
     if(DFile().initialDataBase());{
-        qDebug() << 1;
+        qDebug() << "here"<<1;
     }
     connect(lf,SIGNAL(login(QString)),this,SLOT(initall(QString)));
 

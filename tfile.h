@@ -1,9 +1,9 @@
-#ifndef TFILE_H
+﻿#ifndef TFILE_H
 #define TFILE_H
 #include<QString>
 #include<QDir>
 #include<QFile>
-
+#include <QDebug>
 class TFile
 {
 public:
