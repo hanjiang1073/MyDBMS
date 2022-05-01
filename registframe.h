@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include"tfile.h"
+#include"dfile.h"
 namespace Ui {
 class RegistFrame;
 }
@@ -15,7 +17,7 @@ public:
     explicit RegistFrame(QWidget *parent = nullptr);
     ~RegistFrame();
 signals:
-    void confirm();
+    void confirm(QString);
 private:
     Ui::RegistFrame *ui;
 public slots:

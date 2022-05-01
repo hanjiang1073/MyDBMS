@@ -13,25 +13,30 @@ SOURCES += \
     loginframe.cpp \
     main.cpp \
     mainwindow.cpp \
+    tfile.cpp\
+    recordinsert.cpp \
     registframe.cpp \
-    tfile.cpp
+    tabledesign.cpp
 
 HEADERS += \
     dfile.h \
     loginframe.h \
     mainwindow.h \
+    tfile.h\
+    recordinsert.h \
     registframe.h \
-    tfile.h
+    tabledesign.h
 
 FORMS += \
     loginframe.ui \
     mainwindow.ui \
-    registframe.ui
+    recordinsert.ui \
+    registframe.ui \
+    tabledesign.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
 RESOURCES += \
     Resources.qrc

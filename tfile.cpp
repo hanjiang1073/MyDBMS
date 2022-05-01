@@ -1,13 +1,13 @@
 #include "tfile.h"
 
-tfile::tfile(QString basename)
+TFile::TFile()
 {
-    this->basename = basename;
+
 }
 
-void tfile::createTable(QString tbname)
+void TFile::createTable(QString username,QString basename,QString tbname)
 {
-    QString dirname = "D:/MyDataBase/" + basename+'/'+tbname;
+    QString dirname = "D:/MyDataBase/"+ username+'/' + basename+'/'+tbname;
     QString filename_tdf = dirname + '/' + tbname + ".tdf";
     QString filename_trd = dirname + '/' + tbname + ".trd";
     QString filename_tic = dirname + '/' + tbname + ".tic";

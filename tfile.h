@@ -4,13 +4,12 @@
 #include<QDir>
 #include<QFile>
 
-class tfile
+class TFile
 {
 public:
-    tfile(QString basename);
-    void createTable(QString tbname);
-private:
-    QString basename;
+    TFile();
+    static void createTable(QString username,QString basename,QString tbname);
+
 
 };
 
