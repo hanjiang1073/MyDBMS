@@ -176,7 +176,7 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     p=item->parent();
     if(p!=NULL){
         biaoItem=item;
-      // kuname=kuItem->text(0);
+       kuname=item->parent()->text(0);
       // biaoname=biaoItem->text(0);
        kuItem=NULL;
         //如果说单击的这个item不是根节点即不是库，是表那么就显示其设计界面
