@@ -54,7 +54,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     event->ignore();//不接受退出
     */
     QMessageBox::StandardButton button;
-    button = QMessageBox::question(this, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("是否退出程序") ,QMessageBox::Yes | QMessageBox::No);
+    button = QMessageBox::question(this, QStringLiteral("提示"),QStringLiteral("是否退出程序") ,QMessageBox::Yes | QMessageBox::No);
     if (button == QMessageBox::Yes)
     {
         event->accept();//接受退出
@@ -88,9 +88,9 @@ void MainWindow::on_actionXjb_triggered(){
         QIcon icon;
         icon.addPixmap(QPixmap(":/pic/biao.png"), QIcon::Selected);
         biao->setIcon(0,icon);
-        biao->setText(0,QString::fromLocal8Bit("请输入名称"));
+        biao->setText(0,QStringLiteral("请输入名称"));
     }else{
-        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请先选择库!"));
+        QMessageBox::information(this,QStringLiteral("提示"),QStringLiteral("请先选择库!"));
     }
 
 }
@@ -107,7 +107,7 @@ void MainWindow::on_actionCrd_triggered(){
         showTableWidget();
 
     }else{
-        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请先选择表!"));
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
     }
 }
 
@@ -120,7 +120,7 @@ void MainWindow::on_actionCrj_triggered(){
         ri->initTableWidget();
         ri->show();
     }else{
-        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请先选择表!"));
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
     }
 }
 

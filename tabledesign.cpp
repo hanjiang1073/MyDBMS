@@ -69,7 +69,7 @@ void TableDesign::on_button_confirm(){
         bool t1=ui->pkCheck->isChecked();
         bool t2=ui->nonCheck->isChecked();
         bool t3=ui->unCheck->isChecked();
-        TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str5,str6,t1,t2,t3,str2,,str4);
+        TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str5,str6,t1,t2,t3,str2,str4);
         //关闭窗口
         this->close();
 
