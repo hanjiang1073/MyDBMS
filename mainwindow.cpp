@@ -98,8 +98,8 @@ void MainWindow::on_actionXjb_triggered(){
 void MainWindow::on_actionCrd_triggered(){
     if(this->biaoItem!=NULL){
         td=new TableDesign();
-        td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
-        td->user=this->user;
+        td->biaoItem=biaoItem;//传递选中的表指针以便存值
+        td->user=user;
         td->show();
         showTableWidget();
 
@@ -111,9 +111,11 @@ void MainWindow::on_actionCrd_triggered(){
 //插入记录
 void MainWindow::on_actionCrj_triggered(){
     if(this->biaoItem!=NULL){
+        qDebug()<<biaoItem->text(0);
         ri=new RecordInsert();
-        ri->biaoItem=this->biaoItem;
-        ri->user=this->user;
+        ri->biaoItem=biaoItem;
+        ri->user=user;
+        ri->initTableWidget();
         ri->show();
     }else{
         QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请先选择表!"));

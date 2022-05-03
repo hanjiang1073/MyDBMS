@@ -6,7 +6,6 @@ RecordInsert::RecordInsert(QWidget *parent) :
     ui(new Ui::RecordInsert)
 {
     ui->setupUi(this);
-    initTableWidget();
 }
 
 RecordInsert::~RecordInsert()
@@ -28,7 +27,7 @@ void RecordInsert::initTableWidget(){
 
     //TODO通过biaoItem读取这张表的字段信息
     if(1){
-
+        qDebug()<<"biaoItem:"<<biaoItem->text(0)<<endl;
     }else{
         QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("该表不存在字段！"));
         this->close();

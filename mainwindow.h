@@ -34,7 +34,7 @@ public:
     void showTableWidget();
 private:
     Ui::MainWindow *ui;
-    QString user;//当前用户
+    QString user="system";//当前用户
     LoginFrame *lf;//登入窗口
     TableDesign *td;//字段设计窗口
     RecordInsert *ri;//记录窗口

@@ -89,7 +89,7 @@ bool DFile::initialDataBase()
 bool DFile::createUser(QString username, QString secret)
 {
     QFile userf("D:/MyDataBase/ID.nf");
-    userf.open(QIODevice::ReadWrite);
+    userf.open(QIODevice::Append);
     QDataStream stream (&userf);
 
     stream << username;
