@@ -16,6 +16,8 @@
 #include "tabledesign.h"
 #include <QMap>
 #include "recordinsert.h"
+#include<QTableWidgetItem>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,11 +36,14 @@ public:
     void showTableWidget();
 private:
     Ui::MainWindow *ui;
-    QString user="system";//当前用户
+    QString user;//当前用户
+    QString kuname;
+    QString biaoname;
     LoginFrame *lf;//登入窗口
     TableDesign *td;//字段设计窗口
     RecordInsert *ri;//记录窗口
     QMap<QTreeWidgetItem*,int>hasht;//用于记录表/库是否已经改名
+     QMap<QTreeWidgetItem*,QString>hasht1;//用于存储已经生成的表/库
     QTreeWidgetItem *doubleClickItem=NULL;
     QTreeWidgetItem *kuItem=NULL;//指针指向选中的库
     QTreeWidgetItem *biaoItem=NULL;//指针指向选中的表，kuItem与biaoItem两者只能有一个不为空，因为只能选择一个

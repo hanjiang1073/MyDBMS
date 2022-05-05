@@ -8,7 +8,11 @@ class TFile
 {
 public:
     TFile();
-    static void createTable(QString username,QString basename,QString tbname);
+    static bool createTable(QString username,QString basename,QString tbname);
+
+
+    static bool  tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com);
+
 
 
 };

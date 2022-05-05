@@ -16,7 +16,9 @@ class RecordInsert : public QWidget
 public:
     explicit RecordInsert(QWidget *parent = nullptr);
     ~RecordInsert();
-    QString user="";//当前用户
+    QString user;//当前用户
+    QString kuname;
+    QString biaoname;
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
     void initTableWidget();

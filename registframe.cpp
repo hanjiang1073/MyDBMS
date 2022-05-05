@@ -24,7 +24,7 @@ void RegistFrame::btn_confirm_clicked(){
     if(result == 3){
         DFile().createUser(name,pw);
     }
-    QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("注册成功！"));
+    QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("注册成功！"));
     emit(confirm(name));
     this->close();
 }

@@ -18,6 +18,8 @@ public:
     ~TableDesign();
     void connection();
     QString user;//当前用户
+    QString kuname;
+    QString biaoname;
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
 private:
@@ -28,6 +30,8 @@ private slots:
     void on_checkBox_pkc();//主键选择
     void on_button_confirm();//确认按钮
     void on_button_reset();//重置按钮
+//    void on_typeButton_activated(const QString &arg1);
+
 };
 
 #endif // TABLEDESIGN_H

@@ -1,11 +1,12 @@
 ﻿#include "recordinsert.h"
 #include "ui_recordinsert.h"
-
+#include <QDataStream>
 RecordInsert::RecordInsert(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RecordInsert)
 {
     ui->setupUi(this);
+
 }
 
 RecordInsert::~RecordInsert()
@@ -16,20 +17,21 @@ RecordInsert::~RecordInsert()
 //初始化tablewidget
 void RecordInsert::initTableWidget(){
     ui->tableWidget->setColumnCount(7);
-    ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem(QString::fromLocal8Bit("字段名")));
-    ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem(QString::fromLocal8Bit("字段类型")));
-    ui->tableWidget->setHorizontalHeaderItem(2,new QTableWidgetItem(QString::fromLocal8Bit("长度")));
-    ui->tableWidget->setHorizontalHeaderItem(3,new QTableWidgetItem(QString::fromLocal8Bit("主键")));
-    ui->tableWidget->setHorizontalHeaderItem(4,new QTableWidgetItem(QString::fromLocal8Bit("唯一键")));
-    ui->tableWidget->setHorizontalHeaderItem(5,new QTableWidgetItem(QString::fromLocal8Bit("非空")));
-    ui->tableWidget->setHorizontalHeaderItem(6,new QTableWidgetItem(QString::fromLocal8Bit("值")));
+    ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem(QStringLiteral("字段名")));
+    ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem(QStringLiteral("字段类型")));
+    ui->tableWidget->setHorizontalHeaderItem(2,new QTableWidgetItem(QStringLiteral("长度")));
+    ui->tableWidget->setHorizontalHeaderItem(3,new QTableWidgetItem(QStringLiteral("主键")));
+    ui->tableWidget->setHorizontalHeaderItem(4,new QTableWidgetItem(QStringLiteral("唯一键")));
+    ui->tableWidget->setHorizontalHeaderItem(5,new QTableWidgetItem(QStringLiteral("非空")));
+    ui->tableWidget->setHorizontalHeaderItem(6,new QTableWidgetItem(QStringLiteral("值")));
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     //TODO通过biaoItem读取这张表的字段信息
     if(1){
-        qDebug()<<"biaoItem:"<<biaoItem->text(0)<<endl;
+
+
     }else{
-        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("该表不存在字段！"));
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在字段！"));
         this->close();
     }
 }
@@ -41,11 +43,10 @@ void RecordInsert::on_button_confirm(){
     if(flag==1){
         //TODO写入文件
 
-        this->close();
     }else{
         switch(flag){
             default:
-                QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("违反了完整性约束!"));
+                QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("违反了完整性约束!"));
                 break;
         }
     }

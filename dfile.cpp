@@ -1,9 +1,8 @@
 ﻿#include "dfile.h"
-
+#include <QDateTime>
 //对数据库文件进行操作的类
 DFile::DFile()
 {
-
 
 }
 
@@ -26,11 +25,18 @@ int DFile::createDataBase(QString baseName,QString username)
        bool logo = logf.open(QIODevice::ReadWrite);
 
        if(!dbo || !logo){
+
            dbf.close();
            logf.close();
            return 1;
        }
        else{
+           QDataStream stream(&dbf);
+           QDataStream stream1(&logf);
+           QDateTime dateTime= QDateTime::currentDateTime();//获取系统当前的时间
+           QString str = dateTime.toString("yyyy-MM-dd hh:mm:ss");//格式化时间
+           stream<<username+" "+baseName;
+           stream1<<username+" "+baseName+" "+str;
            dbf.close();
            logf.close();
            return 0;
@@ -71,6 +77,7 @@ bool DFile::initialDataBase()
            return false;
        }
        else{
+
            dbf.close();
            logf.close();
            userf.close();
@@ -89,11 +96,13 @@ bool DFile::initialDataBase()
 bool DFile::createUser(QString username, QString secret)
 {
     QFile userf("D:/MyDataBase/ID.nf");
-    userf.open(QIODevice::Append);
+    userf.open(QIODevice::ReadWrite);
     QDataStream stream (&userf);
 
     stream << username;
     stream << secret;
+
+    userf.close();
 
     QString dirname = "D:/MyDataBase/" + username;
     QDir dir(dirname);
