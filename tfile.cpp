@@ -5,6 +5,7 @@ TFile::TFile()
 
 }
 
+<<<<<<< HEAD
 bool TFile::tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com)
 
 {
@@ -26,6 +27,25 @@ qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1
 }
 
 bool TFile::createTable(QString username,QString basename,QString tbname)
+=======
+bool TFile::tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString min,QString max,bool pk,bool non,bool un,QString com,QString def)
+
+{
+ QString dirname = "D:/MyDataBase/"+ username+'/' + basename+'/'+tbname;
+   QString filename_tdf = dirname + '/' + tbname + ".tdf";
+     //表定义文件
+ QFile tdf(filename_tdf);
+ tdf.open(QIODevice::ReadWrite);
+   QDataStream stream (&tdf);
+   QString pk1= QString::number(pk);
+   QString non1=QString::number(non);
+   QString un1=QString::number(un);
+   stream<<name+" "+type+" "+len+" "+min+" "+max+" "+pk1+" "+non1+" "+un1+" "+com+" "+def;
+  tdf.close();
+                        }
+
+bool  TFile::createTable(QString username,QString basename,QString tbname)
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 {
 
     QString dirname = "D:/MyDataBase/"+ username+'/' + basename+'/'+tbname;

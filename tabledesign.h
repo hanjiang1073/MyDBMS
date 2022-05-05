@@ -30,7 +30,11 @@ private slots:
     void on_checkBox_pkc();//主键选择
     void on_button_confirm();//确认按钮
     void on_button_reset();//重置按钮
+<<<<<<< HEAD
 //    void on_typeButton_activated(const QString &arg1);
+=======
+    void on_typeButton_activated(const QString &arg1);
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 };
 
 #endif // TABLEDESIGN_H

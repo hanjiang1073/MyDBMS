@@ -5,12 +5,20 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
     ui->setupUi(this);
     createMenu();
     createTreeWidget();
     lf=new LoginFrame();
     lf->show();
+<<<<<<< HEAD
     if(DFile().initialDataBase()){
+=======
+    if(DFile().initialDataBase());{
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
         qDebug() << "here"<<1;
     }
     connect(lf,SIGNAL(login(QString)),this,SLOT(initall(QString)));
@@ -25,11 +33,19 @@ MainWindow::~MainWindow()
 //具体控件名字见.ui文件
 void MainWindow::createMenu(){
     connect(ui->actionquit, &QAction::triggered, this, &MainWindow::on_actionExit_triggered);
+<<<<<<< HEAD
     connect(ui->actionxjk,&QAction::triggered,this,&MainWindow::on_actionXjk_triggered);    //新建库
     connect(ui->actionxjb,&QAction::triggered,this,&MainWindow::on_actionXjb_triggered);    //新建表
     connect(ui->actiondkk,&QAction::triggered,this,&MainWindow::on_actionDkk_triggered);    //打开库
     connect(ui->actioncrd,&QAction::triggered,this,&MainWindow::on_actionCrd_triggered);    //插入字段
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
+=======
+    connect(ui->actionxjk,&QAction::triggered,this,&MainWindow::on_actionXjk_triggered);
+    connect(ui->actionxjb,&QAction::triggered,this,&MainWindow::on_actionXjb_triggered);
+    connect(ui->actiondkk,&QAction::triggered,this,&MainWindow::on_actionDkk_triggered);
+    connect(ui->actioncrd,&QAction::triggered,this,&MainWindow::on_actionCrd_triggered);
+    connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 }
 
 //根据当前用户初始化所有信息
@@ -76,7 +92,11 @@ void MainWindow::on_actionXjk_triggered(){
     QIcon icon;
     icon.addPixmap(QPixmap(":/pic/Ku.png"), QIcon::Selected);
     Ku->setIcon(0,icon);
+<<<<<<< HEAD
     Ku->setText(0,QStringLiteral("请输入名称"));
+=======
+    Ku->setText(0,QString::fromLocal8Bit("请输入名称"));
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 
 }
 //新建表槽函数
@@ -148,7 +168,11 @@ void MainWindow::slotFinishEdit(){
         QString text = edit->text();
         ui->treeWidget->removeItemWidget(doubleClickItem, 0);
         if(text==""){
+<<<<<<< HEAD
             QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请输入名称"));
+=======
+            QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("请输入名称"));
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
         }else{
 
             doubleClickItem->setText(0,text);
@@ -162,7 +186,11 @@ void MainWindow::slotFinishEdit(){
                  TFile::createTable(this->user,kuname,text);
             }
             QMessageBox::StandardButton button;
+<<<<<<< HEAD
             button = QMessageBox::question(this, QStringLiteral("提示"), QStringLiteral("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
+=======
+            button = QMessageBox::question(this, QString::fromLocal8Bit("提示"), QString::fromLocal8Bit("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
               //字段设计窗口//TODO这里应该将名称记录到对应数据字典中(在数据字典中无同名的情况下，如果同名则提示失败)
 
         }
@@ -176,7 +204,10 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     if(p!=NULL){
         biaoItem=item;
        kuname=item->parent()->text(0);
+<<<<<<< HEAD
        biaoname=item->text(0);
+=======
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
       // biaoname=biaoItem->text(0);
        kuItem=NULL;
         //如果说单击的这个item不是根节点即不是库，是表那么就显示其设计界面
@@ -200,6 +231,7 @@ void MainWindow::showTableWidget(){
     //先清空
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
+<<<<<<< HEAD
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     //创建表头
     ui->tableWidget->setColumnCount(10);
@@ -275,4 +307,20 @@ qDebug()<<"进入循环了！";
         }
     }
     tdf.close();
+=======
+    //创建表头
+    ui->tableWidget->setColumnCount(10);
+    ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem(QString::fromLocal8Bit("字段名")));
+    ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem(QString::fromLocal8Bit("字段类型")));
+    ui->tableWidget->setHorizontalHeaderItem(2,new QTableWidgetItem(QString::fromLocal8Bit("长度")));
+    ui->tableWidget->setHorizontalHeaderItem(3,new QTableWidgetItem(QString::fromLocal8Bit("默认值")));
+    ui->tableWidget->setHorizontalHeaderItem(4,new QTableWidgetItem(QString::fromLocal8Bit("最小值")));
+    ui->tableWidget->setHorizontalHeaderItem(5,new QTableWidgetItem(QString::fromLocal8Bit("最大值")));
+    ui->tableWidget->setHorizontalHeaderItem(6,new QTableWidgetItem(QString::fromLocal8Bit("主键")));
+    ui->tableWidget->setHorizontalHeaderItem(7,new QTableWidgetItem(QString::fromLocal8Bit("唯一键")));
+    ui->tableWidget->setHorizontalHeaderItem(8,new QTableWidgetItem(QString::fromLocal8Bit("非空")));
+    ui->tableWidget->setHorizontalHeaderItem(9,new QTableWidgetItem(QString::fromLocal8Bit("注释")));
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    //TODO下面读取字段信息
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 }

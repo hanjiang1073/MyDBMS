@@ -2,6 +2,9 @@
     <qresource prefix="/">
         <file>pic/Ku.png</file>
         <file>pic/biao.png</file>
+<<<<<<< HEAD
         <file>pic/choose.jpg</file>
+=======
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
     </qresource>
 </RCC>

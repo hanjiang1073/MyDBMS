@@ -31,11 +31,19 @@ void LoginFrame::btn_login_clicked(){
 
     //由于用户表还没写这里是测试
     if(result==1){
+<<<<<<< HEAD
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("登入成功！"));
         emit(login(name));//传递登入信号并传参
         this->close();
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("用户名或密码错误！"));
+=======
+        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("登入成功！"));
+        emit(login(name));//传递登入信号并传参
+        this->close();
+    }else{
+        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("用户名或密码错误！"));
+>>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
     }
 
 }
