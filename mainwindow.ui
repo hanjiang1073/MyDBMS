@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1132</width>
+    <height>573</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>161</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>DBMS</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>10</y>
+      <width>941</width>
+      <height>511</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1132</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_S">
+    <property name="title">
+     <string>系统(S)</string>
+    </property>
+    <addaction name="actioncha"/>
+    <addaction name="actionrizhi"/>
+    <addaction name="actionsave"/>
+    <addaction name="actionquit"/>
+   </widget>
+   <widget class="QMenu" name="menu_K">
+    <property name="title">
+     <string>数据库(K)</string>
+    </property>
+    <addaction name="actionxjk"/>
+    <addaction name="actiondkk"/>
+    <addaction name="actionsck"/>
+   </widget>
+   <widget class="QMenu" name="menu_B">
+    <property name="title">
+     <string>表(B)</string>
+    </property>
+    <widget class="QMenu" name="menu_S_2">
+     <property name="title">
+      <string>设计表(S)</string>
+     </property>
+     <addaction name="actioncrd"/>
+     <addaction name="actionckd"/>
+     <addaction name="actionxgd"/>
+     <addaction name="actionscd"/>
+    </widget>
+    <addaction name="actionxjb"/>
+    <addaction name="menu_S_2"/>
+    <addaction name="actiondkb"/>
+    <addaction name="actionscb"/>
+   </widget>
+   <widget class="QMenu" name="menu_Q">
+    <property name="title">
+     <string>记录(R)</string>
+    </property>
+    <addaction name="actiontjc"/>
+    <addaction name="actioncrj"/>
+    <addaction name="actionxgj"/>
+    <addaction name="actionscj"/>
+   </widget>
+   <widget class="QMenu" name="menu_U">
+    <property name="title">
+     <string>用户(U)</string>
+    </property>
+    <addaction name="actionqx"/>
+   </widget>
+   <widget class="QMenu" name="menu_H">
+    <property name="title">
+     <string>帮助(H)</string>
+    </property>
+    <addaction name="actiongy"/>
+   </widget>
+   <addaction name="menu_S"/>
+   <addaction name="menu_K"/>
+   <addaction name="menu_B"/>
+   <addaction name="menu_Q"/>
+   <addaction name="menu_U"/>
+   <addaction name="menu_H"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actioncha">
+   <property name="text">
+    <string>查看用户(U)</string>
+   </property>
+  </action>
+  <action name="actionrizhi">
+   <property name="text">
+    <string>系统日志(R)</string>
+   </property>
+  </action>
+  <action name="actionquit">
+   <property name="text">
+    <string>退出(Q)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionxjk">
+   <property name="text">
+    <string>新建库(N)</string>
+   </property>
+  </action>
+  <action name="actiondkk">
+   <property name="text">
+    <string>打开库(O)</string>
+   </property>
+  </action>
+  <action name="actionsck">
+   <property name="text">
+    <string>删除库(D)</string>
+   </property>
+  </action>
+  <action name="actionxjb">
+   <property name="text">
+    <string>新建表(N)</string>
+   </property>
+  </action>
+  <action name="actiondkb">
+   <property name="text">
+    <string>打开表(O)</string>
+   </property>
+  </action>
+  <action name="actionscb">
+   <property name="text">
+    <string>删除表(D)</string>
+   </property>
+  </action>
+  <action name="actioncrd">
+   <property name="text">
+    <string>插入字段(I)</string>
+   </property>
+  </action>
+  <action name="actionckd">
+   <property name="text">
+    <string>查看字段(L)</string>
+   </property>
+  </action>
+  <action name="actionxgd">
+   <property name="text">
+    <string>修改字段(U)</string>
+   </property>
+  </action>
+  <action name="actionscd">
+   <property name="text">
+    <string>删除字段(D)</string>
+   </property>
+  </action>
+  <action name="actiontjc">
+   <property name="text">
+    <string>条件查询(S)</string>
+   </property>
+  </action>
+  <action name="actioncrj">
+   <property name="text">
+    <string>插入记录(I)</string>
+   </property>
+  </action>
+  <action name="actionxgj">
+   <property name="text">
+    <string>修改记录(U)</string>
+   </property>
+  </action>
+  <action name="actionscj">
+   <property name="text">
+    <string>删除记录(D)</string>
+   </property>
+  </action>
+  <action name="actionqx">
+   <property name="text">
+    <string>权限与安全(R)</string>
+   </property>
+  </action>
+  <action name="actiongy">
+   <property name="text">
+    <string>关于MyDBMS...</string>
+   </property>
+  </action>
+  <action name="actionsave">
+   <property name="text">
+    <string>保存(S)</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
