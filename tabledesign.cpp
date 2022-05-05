@@ -23,10 +23,7 @@ void TableDesign::on_checkBox_pkc(){
         ui->nonCheck->setChecked(true);
     }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 //字段类型comboBox选项设置
 void TableDesign::on_comboBox_CIC(const QString &arg){
     //如果选的是Integer或Float 字段长度一栏不可填
@@ -73,7 +70,6 @@ void TableDesign::on_button_confirm(){
         bool t1=ui->pkCheck->isChecked();
         bool t2=ui->nonCheck->isChecked();
         bool t3=ui->unCheck->isChecked();
-<<<<<<< HEAD
         if(str2=="")
         {
             str2="NULL";
@@ -108,14 +104,6 @@ qDebug()<<"user:"<<user;
     }
 }
 
-=======
-        TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str5,str6,t1,t2,t3,str2,str4);
-        //关闭窗口
-        this->close();
-
-    }
-}
->>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 //重置按钮
 void TableDesign::on_button_reset(){
     ui->nameEdit->clear();

@@ -16,10 +16,8 @@
 #include "tabledesign.h"
 #include <QMap>
 #include "recordinsert.h"
-<<<<<<< HEAD
 #include<QTableWidgetItem>
-=======
->>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

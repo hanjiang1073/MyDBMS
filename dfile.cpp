@@ -4,10 +4,6 @@
 DFile::DFile()
 {
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
 }
 
 //返回2是已存在，返回1是创建失败，返回0是创建成功
@@ -106,11 +102,8 @@ bool DFile::createUser(QString username, QString secret)
     stream << username;
     stream << secret;
 
-<<<<<<< HEAD
     userf.close();
 
-=======
->>>>>>> a4c3023aef11e59184da49d261f354f286c2b08a
     QString dirname = "D:/MyDataBase/" + username;
     QDir dir(dirname);
     if(!dir.exists()){
