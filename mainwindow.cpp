@@ -237,7 +237,7 @@ void MainWindow::showTableWidget(){
     QString filename_tdf = dirname + '/' + biaoname + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
-    if(tdf.open(QIODevice::ReadWrite))
+    if(tdf.open(QIODevice::ReadOnly))
     {
 qDebug()<<"文件打开成功";
     }
@@ -245,9 +245,7 @@ qDebug()<<"文件打开成功";
 
     QString str;
     QStringList strlist;
-
-if(stream.atEnd())
-qDebug()<<"stream到尾巴了";
+    int i=0;
 
     //将值分解后写入单元格
     while(!stream.atEnd()){
@@ -270,15 +268,16 @@ qDebug()<<"进入循环了！";
                     icon.addPixmap(QPixmap(":/pic/choose.jpg"));
                     citem->setTextAlignment(Qt::AlignCenter);
                     citem->setIcon(icon);
-                    ui->tableWidget->setItem(0,j,citem);
+                    ui->tableWidget->setItem(i,j,citem);
                 }
 
             }else
             {
-                ui->tableWidget->setItem(0,j,new QTableWidgetItem(strlist[j]));
+                ui->tableWidget->setItem(i,j,new QTableWidgetItem(strlist[j]));
             }
 
         }
+        i++;
     }
     tdf.close();
 
