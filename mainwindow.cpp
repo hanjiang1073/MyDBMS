@@ -33,14 +33,41 @@ void MainWindow::createMenu(){
     connect(ui->actiondkk,&QAction::triggered,this,&MainWindow::on_actionDkk_triggered);    //打开库
     connect(ui->actioncrd,&QAction::triggered,this,&MainWindow::on_actionCrd_triggered);    //插入字段
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
-
+    connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
 }
 
 //根据当前用户初始化所有信息
 void MainWindow::initall(QString name){
     this->user=name;
-    //TODO根据user名加载出这个用户已经存在的库、表、记录
+    //TODO根据user名加载出这个用户已经存在的库、表
+    QString dirname="D:/MyDataBase/"+ user;
+    QDir dir(dirname);
+    QStringList names = dir.entryList(QDir::Dirs);
+    names.removeOne(".");
+    names.removeOne("..");
+    auto it=names.begin();
+    while(it!=names.end()){
+        QString kuname=*it;
+        qDebug()<<*it<<endl;
+        on_actionXjk_triggered();
+        kuItem->setText(0,kuname);
+        hasht[kuItem]=1;
 
+        QString biaodirname="D:/MyDataBase/"+ user+"/"+kuname;
+        QDir biaodir(biaodirname);
+        QStringList biaonames = biaodir.entryList(QDir::Dirs);
+        biaonames.removeOne(".");
+        biaonames.removeOne("..");
+        auto biaoit=biaonames.begin();
+        while(biaoit!=biaonames.end()){
+            QString biaoname=*biaoit;
+            on_actionXjb_triggered();
+            biaoItem->setText(0,biaoname);
+            hasht[biaoItem]=1;
+            biaoit++;
+        }
+        it++;
+    }
     this->show();
 }
 
@@ -82,7 +109,7 @@ void MainWindow::on_actionXjk_triggered(){
     Ku->setIcon(0,icon);
 
     Ku->setText(0,QStringLiteral("请输入名称"));
-
+    kuItem=Ku;
 }
 //新建表槽函数
 void MainWindow::on_actionXjb_triggered(){
@@ -93,6 +120,7 @@ void MainWindow::on_actionXjb_triggered(){
         icon.addPixmap(QPixmap(":/pic/biao.png"), QIcon::Selected);
         biao->setIcon(0,icon);
         biao->setText(0,QStringLiteral("请输入名称"));
+        biaoItem=biao;
     }else{
         QMessageBox::information(this,QStringLiteral("提示"),QStringLiteral("请先选择库!"));
     }
@@ -120,6 +148,9 @@ void MainWindow::on_actionCrj_triggered(){
     if(this->biaoItem!=NULL){
         ri=new RecordInsert();
         ri->biaoItem=this->biaoItem;
+        ri->biaoname=this->biaoItem->text(0);
+        ri->kuItem=this->biaoItem->parent();
+        ri->kuname=this->biaoItem->parent()->text(0);
         ri->user=this->user;
         ri->initTableWidget();
         ri->show();
@@ -201,7 +232,7 @@ void MainWindow::on_actionDkk_triggered(){
     }
 }
 
-//显示图表
+//显示图表(字段)
 void MainWindow::showTableWidget(){
     //先清空
     ui->tableWidget->setColumnCount(0);
@@ -222,22 +253,11 @@ void MainWindow::showTableWidget(){
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 //TODO下面读取字段信息
 
-
-
-//    int RowCont;
-//    RowCont=ui->tableWidget->rowCount();
-//qDebug()<<RowCont;
-//    ui->tableWidget->setRowCount(RowCont+1);//增加一行
-//qDebug()<<RowCont;
-//    ui->tableWidget->setItem(0,0,new QTableWidgetItem("你好"));//测试
-//    ui->tableWidget->setItem(1,0,new QTableWidgetItem("你好"));
-//qDebug()<<"单元格 你好";
-
     QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
     QString filename_tdf = dirname + '/' + biaoname + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
-    if(tdf.open(QIODevice::ReadWrite))
+    if(tdf.open(QIODevice::ReadOnly))
     {
 qDebug()<<"文件打开成功";
     }
@@ -245,9 +265,7 @@ qDebug()<<"文件打开成功";
 
     QString str;
     QStringList strlist;
-
-if(stream.atEnd())
-qDebug()<<"stream到尾巴了";
+    int i=0;
 
     //将值分解后写入单元格
     while(!stream.atEnd()){
@@ -270,16 +288,78 @@ qDebug()<<"进入循环了！";
                     icon.addPixmap(QPixmap(":/pic/choose.jpg"));
                     citem->setTextAlignment(Qt::AlignCenter);
                     citem->setIcon(icon);
-                    ui->tableWidget->setItem(0,j,citem);
+                    ui->tableWidget->setItem(i,j,citem);
                 }
-
             }else
             {
-                ui->tableWidget->setItem(0,j,new QTableWidgetItem(strlist[j]));
+                ui->tableWidget->setItem(i,j,new QTableWidgetItem(strlist[j]));
             }
 
         }
+        i++;
     }
     tdf.close();
 
+}
+
+//打开表
+void MainWindow::showRecord(){
+    ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setRowCount(0);
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QFile tdf(filename_tdf);
+    tdf.seek(0);
+    if(tdf.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream stream (&tdf);
+    QString str;
+    QStringList strlist;
+    int i=0;
+    if(stream.atEnd()){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在字段！"));
+        this->close();
+    }
+    int column=0;
+    //将值分解后写入单元格
+    while(!stream.atEnd()){
+        column=ui->tableWidget->columnCount();
+        ui->tableWidget->setColumnCount(column+1);
+        stream>>str;
+        strlist=str.split("|");
+        qDebug()<<strlist[0];
+        ui->tableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(strlist[0]));
+    }
+    tdf.close();
+
+    QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_trf = recdir + '/' + biaoname + ".trf";
+    QFile trf(filename_trf);
+    trf.seek(0);
+    if(trf.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream rstream (&trf);
+    QString rstr;
+    QStringList rstrlist;
+    int m=0;
+    //将值分解后写入单元格
+    while(!rstream.atEnd()){
+        qDebug()<<"进入循环了！";
+        int RowCont;
+        RowCont=ui->tableWidget->rowCount();
+        ui->tableWidget->setRowCount(RowCont+1);//增加一行
+        rstream>>rstr;
+        qDebug()<<"rstr"<<rstr<<endl;
+        rstrlist=rstr.split("|");
+        for(int n=0;n<column+1;n++){
+            ui->tableWidget->setItem(m,n,new QTableWidgetItem(rstrlist[n]));
+        }
+        m++;
+    }
+    trf.close();
 }

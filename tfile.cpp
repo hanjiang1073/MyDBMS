@@ -13,7 +13,7 @@ bool TFile::tabledesign(QString username,QString basename,QString tbname,QString
      //表定义文件
 
     QFile tdf(filename_tdf);
-    tdf.open(QIODevice::ReadWrite);
+    tdf.open(QIODevice::Append);
     QDataStream stream (&tdf);
 
     QString pk1= QString::number(pk);
@@ -55,7 +55,7 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         QDataStream stream1 (&trd);
         QDataStream stream2 (&tic);
         QDataStream stream3 (&tid);
-        stream<<username+" "+basename+" "+tbname;
+//        stream<<username+" "+basename+" "+tbname;
         stream1<<username+" "+basename+" "+tbname;
         stream2<<username+" "+basename+" "+tbname;
         stream3<<username+" "+basename+" "+tbname;
@@ -65,9 +65,5 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         tid.close();
         return true;
 
-    }
-    else{
-          return false;
-        //报错
     }
 }

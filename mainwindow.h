@@ -34,6 +34,7 @@ public:
     void createMenu();
     void createTreeWidget();
     void showTableWidget();
+
 private:
     Ui::MainWindow *ui;
     QString user;//当前用户
@@ -58,5 +59,6 @@ private slots:
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
     void initall(QString name);
+    void showRecord();
 };
 #endif // MAINWINDOW_H
