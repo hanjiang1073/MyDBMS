@@ -13,6 +13,7 @@ SOURCES += \
     loginframe.cpp \
     main.cpp \
     mainwindow.cpp \
+    queryframe.cpp \
     tfile.cpp\
     recordinsert.cpp \
     registframe.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     dfile.h \
     loginframe.h \
     mainwindow.h \
+    queryframe.h \
     tfile.h\
     recordinsert.h \
     registframe.h \
@@ -30,6 +32,7 @@ HEADERS += \
 FORMS += \
     loginframe.ui \
     mainwindow.ui \
+    queryframe.ui \
     recordinsert.ui \
     registframe.ui \
     tabledesign.ui

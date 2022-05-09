@@ -34,6 +34,7 @@ void MainWindow::createMenu(){
     connect(ui->actioncrd,&QAction::triggered,this,&MainWindow::on_actionCrd_triggered);    //插入字段
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
+    connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
 }
 
 //根据当前用户初始化所有信息
@@ -220,6 +221,8 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
         showTableWidget();
     }else{
         kuItem=item;
+        biaoname="";
+        kuname=item->text(0);
         // kuname=kuItem->text(col);
          biaoItem=NULL;
     }
@@ -304,6 +307,9 @@ qDebug()<<"进入循环了！";
 
 //打开表
 void MainWindow::showRecord(){
+    if(biaoname==""){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -318,7 +324,6 @@ void MainWindow::showRecord(){
     QDataStream stream (&tdf);
     QString str;
     QStringList strlist;
-    int i=0;
     if(stream.atEnd()){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在字段！"));
         this->close();
@@ -360,6 +365,97 @@ void MainWindow::showRecord(){
             ui->tableWidget->setItem(m,n,new QTableWidgetItem(rstrlist[n]));
         }
         m++;
+    }
+    trf.close();
+}
+
+//条件查询
+void MainWindow::on_actionTjc_triggered(){
+    QueryFrame *qf=new QueryFrame();
+    qf->user=this->user;
+    qf->biaoItem=this->biaoItem;
+    qf->kuItem=this->kuItem;
+    qf->biaoname=this->biaoname;
+    qf->kuname=this->kuname;
+    qf->show();
+    qf->showWidget();
+    connect(qf,SIGNAL(submit(QString)),this,SLOT(forTjc(QString)));
+}
+
+//条件查询的配套函数
+void MainWindow::forTjc(QString values){
+    if(biaoname==""){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+    ui->tableWidget->setColumnCount(0);
+    ui->tableWidget->setRowCount(0);
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QFile tdf(filename_tdf);
+    tdf.seek(0);
+    if(tdf.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream stream (&tdf);
+    QString str;
+    QStringList strlist;
+    if(stream.atEnd()){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在字段！"));
+        this->close();
+    }
+    int column=0;
+    //将值分解后写入单元格
+    while(!stream.atEnd()){
+        column=ui->tableWidget->columnCount();
+        ui->tableWidget->setColumnCount(column+1);
+        stream>>str;
+        strlist=str.split("|");
+        qDebug()<<strlist[0];
+        ui->tableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(strlist[0]));
+    }
+    tdf.close();
+
+    QStringList valueList;
+    valueList=values.split("|");
+    QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_trf = rdirname + '/' + biaoname + ".trf";
+    QFile trf(filename_trf);
+    trf.seek(0);
+    if(trf.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream rstream (&trf);
+    if(rstream.atEnd()){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在记录！"));
+    }
+    while(!rstream.atEnd()){
+        QString records;
+        QStringList recordList;
+        rstream>>records;
+        recordList=records.split("|");
+        int i=0;
+        for(i=0;i<valueList.size();i++){
+            QString value=valueList[i];
+            std::string svalue=value.toStdString();
+            int loc=svalue[0]-'0';//获取记录对应字段下标
+            svalue=svalue.substr(1);
+            QString record=recordList[loc];
+            std::string srecord=record.toStdString();
+            if(svalue!=srecord){
+                break;
+            }
+        }
+        //找到记录
+        if(i==valueList.size()){
+            int row=ui->tableWidget->rowCount();
+            ui->tableWidget->setRowCount(row+1);
+            for(int i=0;i<recordList.size();i++){
+                ui->tableWidget->setItem(row,i,new QTableWidgetItem(recordList[i]));
+            }
+        }
     }
     trf.close();
 }

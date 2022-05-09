@@ -17,7 +17,7 @@
 #include <QMap>
 #include "recordinsert.h"
 #include<QTableWidgetItem>
-
+#include "queryframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -48,6 +48,7 @@ private:
     QTreeWidgetItem *doubleClickItem=NULL;
     QTreeWidgetItem *kuItem=NULL;//指针指向选中的库
     QTreeWidgetItem *biaoItem=NULL;//指针指向选中的表，kuItem与biaoItem两者只能有一个不为空，因为只能选择一个
+
 private slots:
     void on_actionExit_triggered();
     void on_actionXjk_triggered();
@@ -55,6 +56,8 @@ private slots:
     void on_actionDkk_triggered();
     void on_actionCrd_triggered();
     void on_actionCrj_triggered();
+    void on_actionTjc_triggered();
+    void forTjc(QString values);//条件查询接收子窗口信号的函数
     void slotClickItem(QTreeWidgetItem *item,int col);//单击事件
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
