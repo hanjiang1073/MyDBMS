@@ -172,7 +172,7 @@ void RecordInsert::on_button_confirm(){
     //TODU读取文件确认主键、最小值最大值唯一性非空性是否满足
     if(flag==1){
         //TODO写入文件
-        qDebug()<<"write"<<endl;
+        //qDebug()<<"write"<<endl;
         writeFile(str);
     }else{
         switch(flag){

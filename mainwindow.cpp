@@ -27,7 +27,6 @@ MainWindow::~MainWindow()
 //具体控件名字见.ui文件
 void MainWindow::createMenu(){
     connect(ui->actionquit, &QAction::triggered, this, &MainWindow::on_actionExit_triggered);
-
     connect(ui->actionxjk,&QAction::triggered,this,&MainWindow::on_actionXjk_triggered);    //新建库
     connect(ui->actionxjb,&QAction::triggered,this,&MainWindow::on_actionXjb_triggered);    //新建表
     connect(ui->actiondkk,&QAction::triggered,this,&MainWindow::on_actionDkk_triggered);    //打开库
@@ -35,7 +34,9 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
     connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
+    //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
 }
+
 
 //根据当前用户初始化所有信息
 void MainWindow::initall(QString name){
@@ -49,7 +50,7 @@ void MainWindow::initall(QString name){
     auto it=names.begin();
     while(it!=names.end()){
         QString kuname=*it;
-        qDebug()<<*it<<endl;
+        //qDebug()<<*it<<endl;
         on_actionXjk_triggered();
         kuItem->setText(0,kuname);
         hasht[kuItem]=1;
@@ -194,10 +195,12 @@ void MainWindow::slotFinishEdit(){
             {
                 kuname=text;
                  DFile::createDataBase(text,this->user);
+                 DFile().addRecord(1,user,text);
             }
             if(doubleClickItem==biaoItem)
             {
                  TFile::createTable(this->user,kuname,text);
+                 DFile().addDBRecord(1,this->user,kuname,text);
             }
             QMessageBox::StandardButton button;
             button = QMessageBox::question(this, QStringLiteral("提示"), QStringLiteral("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
@@ -359,7 +362,7 @@ void MainWindow::showRecord(){
         RowCont=ui->tableWidget->rowCount();
         ui->tableWidget->setRowCount(RowCont+1);//增加一行
         rstream>>rstr;
-        qDebug()<<"rstr"<<rstr<<endl;
+        //qDebug()<<"rstr"<<rstr<<endl;
         rstrlist=rstr.split("|");
         for(int n=0;n<column+1;n++){
             ui->tableWidget->setItem(m,n,new QTableWidgetItem(rstrlist[n]));
@@ -380,6 +383,20 @@ void MainWindow::on_actionTjc_triggered(){
     qf->show();
     qf->showWidget();
     connect(qf,SIGNAL(submit(QString)),this,SLOT(forTjc(QString)));
+}
+
+//日志查询
+void MainWindow::on_actionrizhi_triggered()
+{
+   blogFrame* blog = new blogFrame();
+   blog->setUser(this->user);
+   int topcount = ui->treeWidget->topLevelItemCount();
+   for(int i=0; i<topcount;i++){
+       QTreeWidgetItem * clone = ui->treeWidget->topLevelItem(i)->clone();
+       blog->addItem(clone);
+   }
+   blog->show();
+   qDebug()<<2;
 }
 
 //条件查询的配套函数

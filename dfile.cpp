@@ -34,9 +34,8 @@ int DFile::createDataBase(QString baseName,QString username)
            QDataStream stream(&dbf);
            QDataStream stream1(&logf);
            QDateTime dateTime= QDateTime::currentDateTime();//获取系统当前的时间
-           QString str = dateTime.toString("yyyy-MM-dd hh:mm:ss");//格式化时间
-           stream<<username+" "+baseName;
-           stream1<<username+" "+baseName+" "+str;
+           QString str = dateTime.toString("yyyy-MM-dd hh:mm:ss");//格式化时间          
+           stream<<username+" "+baseName+" "+str;
            dbf.close();
            logf.close();
            return 0;
@@ -105,9 +104,13 @@ bool DFile::createUser(QString username, QString secret)
     userf.close();
 
     QString dirname = "D:/MyDataBase/" + username;
+    QString recname = "D:/MyDataBase/" + username + "/" + username + ".rec";
     QDir dir(dirname);
+    QFile rec(recname);
     if(!dir.exists()){
         dir.mkdir(dirname);
+        rec.open(QIODevice::ReadWrite);
+        rec.close();
         return true;
     }
     else{
@@ -141,3 +144,73 @@ int DFile::userexist(QString username, QString secret)
     }
     return 3;
 }
+
+//获取当前时间
+QString DFile::currentTime()
+{
+    QDateTime current_date_time =QDateTime::currentDateTime();
+    QString current_date =current_date_time.toString("yyyy-MM-dd hh:mm:ss");
+    return current_date;
+}
+
+
+//用户库操作的记录
+bool DFile::addRecord(int type, QString username, QString baseName)
+{
+    QString recName = "D:/MyDataBase/" + username + "/" + username + ".rec";
+    QFile rec(recName);
+    rec.open(QIODevice::Append);
+    QDataStream stream(&rec);
+    QString msg;
+    switch (type) {
+    case 1:
+          msg = currentTime() + "create database " + baseName + " by " + username;
+          stream << msg;
+          return true;
+    case 2:
+          msg = currentTime() + "operate database " + baseName + " by " + username;
+          stream << msg;
+          return true;
+    case 3:
+          msg = currentTime() + "delete database " + baseName + " by " + username;
+          stream << msg;
+          return true;
+    default:
+        return false;
+    }
+
+}
+
+
+//添加库表记录
+bool DFile::addDBRecord(int type, QString username, QString baseName, QString tbname)
+{
+    QString logName = "D:/MyDataBase/" + username + "/" + baseName +"/" +baseName + ".log";
+    QFile log (logName);
+    log.open(QIODevice::Append);
+    QDataStream stream (&log);
+    QString msg;
+    switch (type) {
+    //创建表
+    case 1:
+        msg = currentTime() + " create table " + tbname + " in " + baseName;
+        stream << msg;
+        return true;
+    //操作表
+    case 2:
+        msg = currentTime() + " operate table " + tbname + " in " + baseName;
+        stream << msg;
+        return true;
+    //删除表
+    case 3:
+        msg = currentTime() + " delete table " + tbname + " in " + baseName;
+        stream << msg;
+        return true;
+
+    default:
+        return false;
+
+    }
+}
+
+

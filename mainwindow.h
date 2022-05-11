@@ -18,6 +18,7 @@
 #include "recordinsert.h"
 #include<QTableWidgetItem>
 #include "queryframe.h"
+#include"blogframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -57,6 +58,7 @@ private slots:
     void on_actionCrd_triggered();
     void on_actionCrj_triggered();
     void on_actionTjc_triggered();
+    void on_actionrizhi_triggered();
     void forTjc(QString values);//条件查询接收子窗口信号的函数
     void slotClickItem(QTreeWidgetItem *item,int col);//单击事件
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
