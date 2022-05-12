@@ -222,17 +222,6 @@ void MainWindow::showTableWidget(){
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 //TODO下面读取字段信息
 
-
-
-//    int RowCont;
-//    RowCont=ui->tableWidget->rowCount();
-//qDebug()<<RowCont;
-//    ui->tableWidget->setRowCount(RowCont+1);//增加一行
-//qDebug()<<RowCont;
-//    ui->tableWidget->setItem(0,0,new QTableWidgetItem("你好"));//测试
-//    ui->tableWidget->setItem(1,0,new QTableWidgetItem("你好"));
-//qDebug()<<"单元格 你好";
-
     QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
     QString filename_tdf = dirname + '/' + biaoname + ".tdf";
     QFile tdf(filename_tdf);
@@ -270,7 +259,6 @@ qDebug()<<"进入循环了！";
                     citem->setIcon(icon);
                     ui->tableWidget->setItem(i,j,citem);
                 }
-
             }else
             {
                 ui->tableWidget->setItem(i,j,new QTableWidgetItem(strlist[j]));
