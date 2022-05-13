@@ -194,12 +194,15 @@ void MainWindow::slotFinishEdit(){
             if(doubleClickItem==kuItem)
             {
                 kuname=text;
-                 DFile::createDataBase(text,this->user);
+                 //DFile::createDataBase(text,this->user);
+                 SQL().CreateD(this->user,kuname);
                  DFile().addRecord(1,user,text);
             }
             if(doubleClickItem==biaoItem)
             {
-                 TFile::createTable(this->user,kuname,text);
+                 biaoname=text;
+                 //TFile::createTable(this->user,kuname,text);
+                 SQL().CreateT(this->user,this->kuname,this->biaoname);
                  DFile().addDBRecord(1,this->user,kuname,text);
             }
             QMessageBox::StandardButton button;

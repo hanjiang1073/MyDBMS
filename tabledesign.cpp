@@ -1,6 +1,7 @@
 ﻿#include "tabledesign.h"
 #include "ui_tabledesign.h"
 #include "tfile.h"
+#include"sql.h"
 TableDesign::TableDesign(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TableDesign)
@@ -98,7 +99,8 @@ qDebug()<<"max为空";
         }
 
         qDebug()<<"t1,t2,t3"<<t1<<t2<<t3;
-        TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+        //TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+       SQL().TDesign(this->user,this->kuname,this->biaoname,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
         //关闭窗口
         this->close();
 qDebug()<<"user:"<<user;
