@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTreeWidgetItem>
 #include <QDebug>
+#include <QFile>
 namespace Ui {
 class RecordInsert;
 }
@@ -22,6 +23,8 @@ public:
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
     void initTableWidget();
+    void writeFile(QString str);
+    bool checkdigit(std::string svalue);
 private:
     Ui::RecordInsert *ui;
 private slots:

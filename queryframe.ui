@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RecordInsert</class>
- <widget class="QWidget" name="RecordInsert">
+ <class>QueryFrame</class>
+ <widget class="QWidget" name="QueryFrame">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>686</width>
-    <height>493</height>
+    <width>361</width>
+    <height>397</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,17 +17,17 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>651</width>
-     <height>391</height>
+     <y>40</y>
+     <width>321</width>
+     <height>311</height>
     </rect>
    </property>
   </widget>
   <widget class="QPushButton" name="confirmButton">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>450</y>
+     <x>70</x>
+     <y>360</y>
      <width>93</width>
      <height>28</height>
     </rect>
@@ -36,30 +36,11 @@
     <string>确认</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>黑体</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>插入记录</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="resetButton">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>450</y>
+     <x>200</x>
+     <y>360</y>
      <width>93</width>
      <height>28</height>
     </rect>
@@ -68,44 +49,46 @@
     <string>重置</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>黑体</family>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>条件查询</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>confirmButton</sender>
    <signal>clicked()</signal>
-   <receiver>RecordInsert</receiver>
-   <slot>on_button_confirm()</slot>
+   <receiver>QueryFrame</receiver>
+   <slot>confirm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>469</y>
+     <x>124</x>
+     <y>369</y>
     </hint>
     <hint type="destinationlabel">
-     <x>72</x>
-     <y>461</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>resetButton</sender>
-   <signal>clicked()</signal>
-   <receiver>RecordInsert</receiver>
-   <slot>on_button_reset()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>462</x>
-     <y>463</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>548</x>
-     <y>463</y>
+     <x>42</x>
+     <y>365</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>on_button_confirm()</slot>
-  <slot>on_button_reset()</slot>
+  <slot>confirm()</slot>
  </slots>
 </ui>

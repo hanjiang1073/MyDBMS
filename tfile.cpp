@@ -25,6 +25,13 @@ qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1
     return true;
 }
 
+
+//添加表日志
+bool TFile::addTBRecord(int type, QString username, QString baseName, QString tbname,QString sql)
+{
+
+}
+
 bool TFile::createTable(QString username,QString basename,QString tbname)
 
 {
@@ -38,7 +45,7 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
     QDir dir(dirname);
     //表定义文件
     QFile tdf(filename_tdf);
-    //表记录文件
+    //表日志文件
     QFile trd(filename_trd);
     //表内容文件
     QFile tic(filename_tic);
@@ -56,9 +63,9 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         QDataStream stream2 (&tic);
         QDataStream stream3 (&tid);
 //        stream<<username+" "+basename+" "+tbname;
-        stream1<<username+" "+basename+" "+tbname;
+        /*stream1<<username+" "+basename+" "+tbname;
         stream2<<username+" "+basename+" "+tbname;
-        stream3<<username+" "+basename+" "+tbname;
+        stream3<<username+" "+basename+" "+tbname;*/
         tdf.close();
         trd.close();
         tic.close();

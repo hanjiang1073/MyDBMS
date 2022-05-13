@@ -57,7 +57,7 @@ void TableDesign::on_button_confirm(){
     //除了字段名称不为空其余都可为空（字段类型是combobox没有空值）
     //TODO需要判断是否同名
     if(ui->nameEdit->text()==""){
-        QMessageBox::information(this, QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("字段名称不能为空！"));
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("字段名称不能为空！"));
     }else{
         //TODO将字段信息写入文件,根据属性user，biaoItem指向的是插入字段的那张表存的时候需要使用
         QString str1=ui->nameEdit->text();
@@ -116,4 +116,3 @@ void TableDesign::on_button_reset(){
     ui->nonCheck->setChecked(false);
     ui->unCheck->setChecked(false);
 }
-

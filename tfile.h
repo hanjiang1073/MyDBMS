@@ -14,6 +14,8 @@ public:
     static bool  tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com);
 
 
+    //表的详细日志
+    static bool addTBRecord(int type, QString username, QString baseName, QString tbname, QString sql);
 
 };
 

@@ -18,6 +18,17 @@ static bool initialDataBase();
 
 static bool createUser(QString username, QString secret);
 static int userexist(QString username, QString secret);
+
+//获取当前时间
+static QString currentTime();
+
+//写入用户记录的粗略日志
+static bool addRecord(int type, QString username, QString baseName);
+
+//写入数据库表的粗略日志（添加表 1，操作表 2 ，删除表 3）
+static bool addDBRecord(int type, QString username, QString baseName, QString tbname);
+
+
 private:
     QString baseName;
 };
