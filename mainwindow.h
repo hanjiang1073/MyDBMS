@@ -34,7 +34,7 @@ public:
     ~MainWindow();
     void closeEvent(QCloseEvent* event);
     void createMenu();
-    void createTreeWidget();
+    void createWidget();
     void showTableWidget();
 
 private:
@@ -50,7 +50,8 @@ private:
     QTreeWidgetItem *doubleClickItem=NULL;
     QTreeWidgetItem *kuItem=NULL;//指针指向选中的库
     QTreeWidgetItem *biaoItem=NULL;//指针指向选中的表，kuItem与biaoItem两者只能有一个不为空，因为只能选择一个
-
+    int recordRow;//选中记录行数
+    bool recordTable=false;//判断当前界面是否是表界面而不是字段界面
 private slots:
     void on_actionExit_triggered();
     void on_actionXjk_triggered();
@@ -60,11 +61,14 @@ private slots:
     void on_actionCrj_triggered();
     void on_actionTjc_triggered();
     void on_actionrizhi_triggered();
+    void on_actionXgj_triggered();
+    void on_actionScj_triggered();
     void forTjc(QString values);//条件查询接收子窗口信号的函数
-    void slotClickItem(QTreeWidgetItem *item,int col);//单击事件
+    void slotClickItem(QTreeWidgetItem *item,int col);//单击选择库、表
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
-    void initall(QString name);
-    void showRecord();
+    void initall(QString name);//用户登入初始化库表
+    void showRecord();//打开表（记录）
+    void slotClickTableItem(int row,int column);//双击选中记录
 };
 #endif // MAINWINDOW_H
