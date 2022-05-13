@@ -34,6 +34,7 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
     connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
+//    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
 }
 
@@ -215,13 +216,13 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     QTreeWidgetItem *p=NULL;
     p=item->parent();
     if(p!=NULL){
-        biaoItem=item;
+       biaoItem=item;
        kuname=item->parent()->text(0);
        biaoname=item->text(0);
       // biaoname=biaoItem->text(0);
        kuItem=NULL;
         //如果说单击的这个item不是根节点即不是库，是表那么就显示其设计界面
-        showTableWidget();
+       showTableWidget();
     }else{
         kuItem=item;
         biaoname="";
@@ -307,6 +308,26 @@ qDebug()<<"进入循环了！";
     tdf.close();
 
 }
+
+/**
+ * @brief 删除字段
+ */
+void MainWindow::on_actionscd_triggered(){
+    if(this->biaoItem!=NULL){
+        int number;//可以直接输入一个序号，也可以通过sql命令传回一个序号
+
+    }else{
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+}
+
+
+
+
+
+
+
+
 
 //打开表
 void MainWindow::showRecord(){
