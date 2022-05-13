@@ -62,7 +62,7 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         QDataStream stream1 (&trd);
         QDataStream stream2 (&tic);
         QDataStream stream3 (&tid);
-        stream<<username+" "+basename+" "+tbname;
+//        stream<<username+" "+basename+" "+tbname;
         /*stream1<<username+" "+basename+" "+tbname;
         stream2<<username+" "+basename+" "+tbname;
         stream3<<username+" "+basename+" "+tbname;*/
