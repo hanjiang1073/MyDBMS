@@ -81,10 +81,10 @@ void RecordInsert::initTableWidget(){
 //写入文件
 void RecordInsert::writeFile(QString str){
     QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = dirname + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.open(QIODevice::Append);
-    QDataStream stream (&trf);
+    QString filename_tic = dirname + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.open(QIODevice::Append);
+    QDataStream stream (&tic);
     stream<<str;
 }
 

@@ -344,14 +344,14 @@ void MainWindow::showRecord(){
     tdf.close();
 
     QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = recdir + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.seek(0);
-    if(trf.open(QIODevice::ReadOnly))
+    QString filename_tic = recdir + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
     {
         qDebug()<<"文件打开成功";
     }
-    QDataStream rstream (&trf);
+    QDataStream rstream (&tic);
     QString rstr;
     QStringList rstrlist;
     int m=0;
@@ -369,7 +369,7 @@ void MainWindow::showRecord(){
         }
         m++;
     }
-    trf.close();
+    tic.close();
 }
 
 //条件查询
@@ -437,14 +437,14 @@ void MainWindow::forTjc(QString values){
     QStringList valueList;
     valueList=values.split("|");
     QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = rdirname + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.seek(0);
-    if(trf.open(QIODevice::ReadOnly))
+    QString filename_tic = rdirname + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
     {
         qDebug()<<"文件打开成功";
     }
-    QDataStream rstream (&trf);
+    QDataStream rstream (&tic);
     if(rstream.atEnd()){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在记录！"));
     }
@@ -474,5 +474,5 @@ void MainWindow::forTjc(QString values){
             }
         }
     }
-    trf.close();
+    tic.close();
 }
