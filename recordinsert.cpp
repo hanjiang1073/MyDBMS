@@ -97,6 +97,7 @@ void RecordInsert::on_button_confirm(){
     QString str;
     //判断当前插入的记录是否合法
     for(int i=0;i<row;i++){
+        QString name=ui->tableWidget->item(i,0)->text();//字段名
         QString type=ui->tableWidget->item(i,1)->text();//字段类型
         QString value=ui->tableWidget->item(i,9)->text();//要插入的值
         QString mins=ui->tableWidget->item(i,4)->text();//最大值（QString）
@@ -233,6 +234,7 @@ void RecordInsert::on_button_confirm(){
     //TODU读取文件确认主键、最小值最大值唯一性非空性是否满足
     if(flag==1){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("插入成功！"));
+        //在此生成SQL语句？
         writeFile(str);
     }else{
         qDebug()<<"wrongRow"<<wrongRow;

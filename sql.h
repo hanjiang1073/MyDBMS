@@ -19,7 +19,8 @@ public:
     void CreateT(QString user,QString kuname ,QString biaoname);
     void CreateD(QString user,QString kuname);
     void CreateU(QString user,QString kuname);
-    void InsertT(QString user,QString kuname,QString biaoname,QString type,QString value,QString mins,QString maxs,QString def);
+    void Logic(QString sql,QString user,QString kuname,QString biaoname);//sql语句识别
+    void InsertT(QString user,QString kuname,QString biaoname,QString name,QString value);//向表插入数据
     void TDesign(QString user,QString kuname,QString biaoname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com);
 };
 
