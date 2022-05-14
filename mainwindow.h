@@ -22,6 +22,7 @@
 #include"sql.h"
 #include "rightframe.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -55,7 +56,8 @@ private:
     QTreeWidgetItem *doubleClickItem=NULL;
     QTreeWidgetItem *kuItem=NULL;//指针指向选中的库
     QTreeWidgetItem *biaoItem=NULL;//指针指向选中的表，kuItem与biaoItem两者只能有一个不为空，因为只能选择一个
-    int recordRow;//选中记录行数
+    int recordRow;  //选中记录行数
+    int tableRow=-1;   //选中字段行数
     bool recordTable=false;//判断当前界面是否是表界面而不是字段界面
 private slots:
     void on_actionExit_triggered();
@@ -66,6 +68,7 @@ private slots:
     void on_actionCrj_triggered();
     void on_actionTjc_triggered();
     void on_actionrizhi_triggered();
+    void on_actionscd_triggered();
     void on_actionXgj_triggered();
     void on_actionScj_triggered();
     void on_actionQx_triggered();

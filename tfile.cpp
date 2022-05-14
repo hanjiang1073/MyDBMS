@@ -82,4 +82,8 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         return true;
 
     }
+    else{
+          return false;
+        //报错
+    }
 }

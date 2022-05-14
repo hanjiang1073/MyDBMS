@@ -34,6 +34,8 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
     connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
+//    connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(get_row_and_col(int,int)));
+    //    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
     connect(ui->actionscj,&QAction::triggered,this,&MainWindow::on_actionScj_triggered);    //删除记录
     connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //删除记录
@@ -310,13 +312,13 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     QTreeWidgetItem *p=NULL;
     p=item->parent();
     if(p!=NULL){
-        biaoItem=item;
+       biaoItem=item;
        kuname=item->parent()->text(0);
        biaoname=item->text(0);
       // biaoname=biaoItem->text(0);
        kuItem=NULL;
         //如果说单击的这个item不是根节点即不是库，是表那么就显示其设计界面
-        showTableWidget();
+       showTableWidget();
     }else{
         kuItem=item;
         biaoname="";
@@ -332,6 +334,10 @@ void MainWindow::slotClickTableItem(int row,int column){
     if(recordTable==true){
         this->recordRow=row;
         qDebug()<<"recordRow"<<recordRow;
+    }else
+    {
+        this->tableRow=row;
+        qDebug()<<"tableRow"<<tableRow;
     }
 }
 
@@ -383,7 +389,6 @@ qDebug()<<"文件打开成功";
 qDebug()<<"进入循环了！";
         int RowCont;
         RowCont=ui->tableWidget->rowCount();
-//qDebug()<<"RowCont:"<<RowCont;
         ui->tableWidget->setRowCount(RowCont+1);//增加一行
         stream>>str;
 
@@ -412,6 +417,103 @@ qDebug()<<"进入循环了！";
     tdf.close();
 
 }
+
+/**
+ * @brief 删除字段
+ */
+void MainWindow::on_actionscd_triggered(){
+    if(this->biaoItem!=NULL){
+        if(tableRow==-1)
+        {
+            QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要删除的字段!"));
+        }
+        else
+        {
+            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+            //删除记录中该字段
+            QString filename_tic = dirname + '/' + biaoname + ".tic";
+            QFile tic(filename_tic);
+            if(tic.open(QIODevice::ReadOnly))
+            {
+                qDebug()<<"文件打开成功";
+            }
+            tic.seek(0);
+            QDataStream rstream (&tic);
+            QString rstr;
+            QStringList rstrlist;//放每一条记录
+            QStringList pstrlist;//放一条记录里的所有字段
+
+            while(!rstream.atEnd())
+            {
+                rstream>>rstr;
+                pstrlist=rstr.split("|");
+                pstrlist.removeAt(tableRow);//删除动作
+                rstr=pstrlist.join("|");
+                rstrlist.append(rstr);
+            }
+            tic.close();
+            //重新写入
+            QFile wtic(filename_tic);
+            wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+//            wtic.open(QFile::Append);
+            wtic.seek(0);
+            QDataStream wstream (&wtic);
+            for(int i=0;i<rstrlist.size();i++){
+                wstream<<rstrlist[i];
+            }
+            wtic.close();
+qDebug()<<"结束删除记录中的字段，准备开始删除字段----------------------";
+
+            //删除字段
+            QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+            QFile tdf(filename_tdf);
+            if(tdf.open(QIODevice::ReadOnly))
+            {
+        qDebug()<<"文件打开成功";
+            }
+            tdf.seek(0);
+            QDataStream stream (&tdf);
+            QString str;
+            QStringList strlist;
+            int i=0;
+
+            while(!stream.atEnd())
+            {
+                stream>>str;
+                strlist.append(str);
+                i++;
+            }
+            tdf.close();
+
+            //重新写入
+            QFile wtdf(filename_tdf);
+            wtdf.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+            wtdf.seek(0);
+            QDataStream wtdfstream(&wtdf);
+
+            for(i=0;i<strlist.size();i++)
+            {
+                if(i!=tableRow)       //读到要删除的那一行
+                {
+                    wtdfstream<<strlist[i];
+                }
+            }
+            wtdf.close();
+        }
+
+
+    }else{
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+}
+
+
+
+
+
+
+
+
 
 //打开表
 void MainWindow::showRecord(){

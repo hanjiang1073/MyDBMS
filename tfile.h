@@ -16,6 +16,7 @@ public:
 
     //表的详细日志
     static bool addTBRecord(int type, QString username, QString baseName, QString tbname, QString sql);
+
 };
 
 #endif // TFILE_H

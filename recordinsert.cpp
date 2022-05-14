@@ -16,6 +16,7 @@ RecordInsert::~RecordInsert()
 
 //初始化tablewidget
 void RecordInsert::initTableWidget(){
+
     ui->tableWidget->setColumnCount(10);
     ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem(QStringLiteral("字段名")));
     ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem(QStringLiteral("字段类型")));

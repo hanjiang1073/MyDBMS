@@ -29,7 +29,6 @@ static bool addRecord(int type, QString username, QString baseName);
 static bool addDBRecord(int type, QString username, QString baseName, QString tbname);
 
 
-
 private:
     QString baseName;
 };
