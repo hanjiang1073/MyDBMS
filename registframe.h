@@ -22,6 +22,7 @@ private:
     Ui::RegistFrame *ui;
 public slots:
     void btn_confirm_clicked();
+    void on_checkBox_dba();
 };
 
 #endif // REGISTFRAME_H

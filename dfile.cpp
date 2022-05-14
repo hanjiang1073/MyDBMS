@@ -92,15 +92,19 @@ bool DFile::initialDataBase()
 
 
 //返回true创建成功，false表示已存在用户
-bool DFile::createUser(QString username, QString secret)
+bool DFile::createUser(QString username, QString secret,QString dba,QString create,QString update,QString dele)
 {
     QFile userf("D:/MyDataBase/ID.nf");
-    userf.open(QIODevice::ReadWrite);
+    userf.open(QIODevice::Append);
     QDataStream stream (&userf);
 
+    //存入用户信息包括账号密码和各权限
     stream << username;
     stream << secret;
-
+    stream<<dba;
+    stream<<create;
+    stream<<update;
+    stream<<dele;
     userf.close();
 
     QString dirname = "D:/MyDataBase/" + username;
@@ -128,10 +132,13 @@ int DFile::userexist(QString username, QString secret)
 
     QString ID;
     QString scrt;
-
+    QString str;
     while(!stream.atEnd()){
         stream >> ID;
         stream >> scrt;
+        for(int i=0;i<4;i++){
+            stream>>str;
+        }
         if(ID==username){
             if(scrt==secret){
                 return 1;
@@ -213,4 +220,24 @@ bool DFile::addDBRecord(int type, QString username, QString baseName, QString tb
     }
 }
 
-
+//检查是否存在dba
+bool DFile::checkDBA(){
+    QFile userf("D:/MyDataBase/ID.nf");
+    userf.open(QIODevice::ReadOnly);
+    QDataStream stream (&userf);
+    QString str;
+    while(!stream.atEnd()){
+        for(int i=0;i<6;i++){
+            stream>>str;
+            if(i==2){
+                if(str=="1"){
+                    //已存在dba返回false
+                    userf.close();
+                    return false;
+                }
+            }
+        }
+    }
+    userf.close();
+    return true;
+}
