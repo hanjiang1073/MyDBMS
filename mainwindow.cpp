@@ -211,6 +211,7 @@ void MainWindow::slotFinishEdit(){
         hasht[doubleClickItem]=1;
     }
 }
+
 //单击（选中）槽函数
 void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     QTreeWidgetItem *p=NULL;
