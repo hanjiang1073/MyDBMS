@@ -18,7 +18,8 @@ SOURCES += \
     tfile.cpp\
     recordinsert.cpp \
     registframe.cpp \
-    tabledesign.cpp
+    tabledesign.cpp \
+    sql.cpp
 
 HEADERS += \
     blogframe.h \
@@ -29,7 +30,8 @@ HEADERS += \
     tfile.h\
     recordinsert.h \
     registframe.h \
-    tabledesign.h
+    tabledesign.h \
+    sql.h
 
 FORMS += \
     blogframe.ui \

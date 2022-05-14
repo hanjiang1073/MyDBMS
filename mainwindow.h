@@ -19,6 +19,7 @@
 #include<QTableWidgetItem>
 #include "queryframe.h"
 #include"blogframe.h"
+#include"sql.h"
 
 
 QT_BEGIN_NAMESPACE

@@ -1,6 +1,7 @@
 ﻿#include "tabledesign.h"
 #include "ui_tabledesign.h"
 #include "tfile.h"
+#include"sql.h"
 TableDesign::TableDesign(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TableDesign)
@@ -68,8 +69,9 @@ void TableDesign::on_button_confirm(){
         QString str6=ui->maxnEdit->text();
          QString str7=ui->typeButton->currentText();
         bool t1=ui->pkCheck->isChecked();
-        bool t2=ui->nonCheck->isChecked();
-        bool t3=ui->unCheck->isChecked();
+        bool t2=ui->unCheck->isChecked();
+        bool t3=ui->nonCheck->isChecked();
+
         if(str2=="")
         {
             str2="NULL";
@@ -96,8 +98,9 @@ qDebug()<<"min为空";
 qDebug()<<"max为空";
         }
 
-
-        TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+        qDebug()<<"t1,t2,t3"<<t1<<t2<<t3;
+        //TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+       SQL().TDesign(this->user,this->kuname,this->biaoname,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
         //关闭窗口
         this->close();
 qDebug()<<"user:"<<user;

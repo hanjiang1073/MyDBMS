@@ -29,7 +29,7 @@ qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1
 //添加表日志
 bool TFile::addTBRecord(int type, QString username, QString baseName, QString tbname,QString sql)
 {
-
+    return true;
 }
 
 bool TFile::createTable(QString username,QString basename,QString tbname)

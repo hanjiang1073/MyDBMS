@@ -195,12 +195,15 @@ void MainWindow::slotFinishEdit(){
             if(doubleClickItem==kuItem)
             {
                 kuname=text;
-                 DFile::createDataBase(text,this->user);
+                 //DFile::createDataBase(text,this->user);
+                 SQL().CreateD(this->user,kuname);
                  DFile().addRecord(1,user,text);
             }
             if(doubleClickItem==biaoItem)
             {
-                 TFile::createTable(this->user,kuname,text);
+                 biaoname=text;
+                 //TFile::createTable(this->user,kuname,text);
+                 SQL().CreateT(this->user,this->kuname,this->biaoname);
                  DFile().addDBRecord(1,this->user,kuname,text);
             }
             QMessageBox::StandardButton button;
@@ -366,14 +369,14 @@ void MainWindow::showRecord(){
     tdf.close();
 
     QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = recdir + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.seek(0);
-    if(trf.open(QIODevice::ReadOnly))
+    QString filename_tic = recdir + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
     {
         qDebug()<<"文件打开成功";
     }
-    QDataStream rstream (&trf);
+    QDataStream rstream (&tic);
     QString rstr;
     QStringList rstrlist;
     int m=0;
@@ -391,7 +394,7 @@ void MainWindow::showRecord(){
         }
         m++;
     }
-    trf.close();
+    tic.close();
 }
 
 //条件查询
@@ -407,25 +410,24 @@ void MainWindow::on_actionTjc_triggered(){
     connect(qf,SIGNAL(submit(QString)),this,SLOT(forTjc(QString)));
 }
 
-//日志查询
-void MainWindow::on_actionrizhi_triggered()
-{
-   blogFrame* blog = new blogFrame();
-   blog->setUser(this->user);
-   int topcount = ui->treeWidget->topLevelItemCount();
-   for(int i=0; i<topcount;i++){
-       QTreeWidgetItem * clone = ui->treeWidget->topLevelItem(i)->clone();
-       blog->addItem(clone);
-   }
-   blog->show();
-   qDebug()<<2;
-}
-
 //条件查询的配套函数
 void MainWindow::forTjc(QString values){
     if(biaoname==""){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
     }
+    QStringList valueList;
+    valueList=values.split("|");//查询的字段及相应信息
+    //解析需要获取的字段
+    std::vector<int> fields;
+    for(int n=0;n<valueList.size();n++){
+        QString value=valueList[n];
+        std::string svalue=value.toStdString();
+        int loc=svalue[0]-'0';//获取需要字段的下标
+        fields.push_back(loc);
+        qDebug()<<"fields"<<loc;
+    }
+
+    //载入字段表头
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -445,28 +447,34 @@ void MainWindow::forTjc(QString values){
         this->close();
     }
     int column=0;
-    //将值分解后写入单元格
+    int p=0;
+    int q=0;
+    //将查询需要的字段分解后写入单元格
     while(!stream.atEnd()){
-        column=ui->tableWidget->columnCount();
-        ui->tableWidget->setColumnCount(column+1);
+
         stream>>str;
         strlist=str.split("|");
-        qDebug()<<strlist[0];
-        ui->tableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(strlist[0]));
+        if(p<fields.size()&&fields[p]==q){
+            column=ui->tableWidget->columnCount();
+            ui->tableWidget->setColumnCount(column+1);
+            ui->tableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(strlist[0]));
+            p++;
+        }
+        q++;
     }
     tdf.close();
 
-    QStringList valueList;
-    valueList=values.split("|");
+
+    //将记录写入表
     QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = rdirname + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.seek(0);
-    if(trf.open(QIODevice::ReadOnly))
+    QString filename_tic = rdirname + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
     {
         qDebug()<<"文件打开成功";
     }
-    QDataStream rstream (&trf);
+    QDataStream rstream (&tic);
     if(rstream.atEnd()){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在记录！"));
     }
@@ -476,25 +484,87 @@ void MainWindow::forTjc(QString values){
         rstream>>records;
         recordList=records.split("|");
         int i=0;
-        for(i=0;i<valueList.size();i++){
+        for(i=0;i<fields.size();i++){
             QString value=valueList[i];
             std::string svalue=value.toStdString();
-            int loc=svalue[0]-'0';//获取记录对应字段下标
+            int loc=fields[i];//获取记录对应字段下标
             svalue=svalue.substr(1);
-            QString record=recordList[loc];
-            std::string srecord=record.toStdString();
-            if(svalue!=srecord){
-                break;
+            //如果当前字段是*即无查询条件continue
+            if(svalue=="*"){
+                continue;
+            }
+            //首先判断是不是范围查询
+            int index=svalue.find(",");
+            //不是范围查询
+            if(index==-1){
+                //判断有无！即是否取等于还是不等于
+                int index_not=svalue.find("!");
+                //取等于的情况
+                if(index_not==-1){
+                    QString record=recordList[loc];
+                    std::string srecord=record.toStdString();
+                    if(svalue!=srecord){
+                        break;
+                    }
+                }
+                //取不等于的情况
+                if(index_not==0){
+                    svalue=svalue.substr(1);
+                    QString record=recordList[loc];
+                    std::string srecord=record.toStdString();
+                    if(svalue==srecord){
+                        break;
+                    }
+                }
+            }
+            //是范围查询
+            else{
+                std::string mins=svalue.substr(0,index);
+                std::string maxs=svalue.substr(index+1);
+                QString record=recordList[loc];
+                std::string srecord=record.toStdString();
+                double nrecord=std::stof(srecord);
+                //判断是否符合范围区间
+                if(mins!=""){
+                    double minn=std::stof(mins);
+                    if(nrecord<minn){
+                        break;
+                    }
+                }
+                if(maxs!=""){
+                    double maxn=std::stof(maxs);
+                    if(nrecord>maxn){
+                        break;
+                    }
+                }
             }
         }
         //找到记录
+        p=0;
+        q=0;
         if(i==valueList.size()){
             int row=ui->tableWidget->rowCount();
             ui->tableWidget->setRowCount(row+1);
-            for(int i=0;i<recordList.size();i++){
-                ui->tableWidget->setItem(row,i,new QTableWidgetItem(recordList[i]));
+            while(p<fields.size()){
+                ui->tableWidget->setItem(row,p,new QTableWidgetItem(recordList[fields[p]]));
+                p++;
             }
         }
     }
-    trf.close();
+    tic.close();
+
+}
+
+//日志查询
+void MainWindow::on_actionrizhi_triggered()
+{
+   blogFrame* blog = new blogFrame();
+   blog->setUser(this->user);
+   int topcount = ui->treeWidget->topLevelItemCount();
+   for(int i=0; i<topcount;i++){
+       QTreeWidgetItem * clone = ui->treeWidget->topLevelItem(i)->clone();
+       blog->addItem(clone);
+   }
+   blog->show();
+   qDebug()<<2;
 }

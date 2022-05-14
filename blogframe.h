@@ -5,7 +5,7 @@
 #include<QTreeWidgetItem>
 #include<QFile>
 #include<QDataStream>
-
+#include <QDebug>
 namespace Ui {
 class blogFrame;
 }

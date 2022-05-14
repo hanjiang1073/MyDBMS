@@ -47,9 +47,7 @@ void RecordInsert::initTableWidget(){
     }
     //将值分解后写入单元格
     while(!stream.atEnd()){
-        qDebug()<<"进入循环了！";
-        int RowCont;
-        RowCont=ui->tableWidget->rowCount();
+        int RowCont=ui->tableWidget->rowCount();
 //qDebug()<<"RowCont:"<<RowCont;
         ui->tableWidget->setRowCount(RowCont+1);//增加一行
         stream>>str;
@@ -67,6 +65,9 @@ void RecordInsert::initTableWidget(){
                     citem->setTextAlignment(Qt::AlignCenter);
                     citem->setIcon(icon);
                     ui->tableWidget->setItem(i,j,citem);
+                    if(j==6){
+                        pks.push_back(RowCont);
+                    }
                 }
             }else
             {
@@ -82,104 +83,178 @@ void RecordInsert::initTableWidget(){
 //写入文件
 void RecordInsert::writeFile(QString str){
     QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_trf = dirname + '/' + biaoname + ".trf";
-    QFile trf(filename_trf);
-    trf.open(QIODevice::Append);
-    QDataStream stream (&trf);
+    QString filename_tic = dirname + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.open(QIODevice::Append);
+    QDataStream stream (&tic);
     stream<<str;
 }
 
 //确认按钮
 void RecordInsert::on_button_confirm(){
     int row=ui->tableWidget->rowCount();
-    int flag=1;//不妨用1表示合法，2表示违反类型约束，3表示违反检查约束
+    int flag=1;//不妨用1表示合法，2表示违反类型约束，3表示违反检查约束,4不符合键约束
     int wrongRow=-1;
     QString str;
+    //判断当前插入的记录是否合法
     for(int i=0;i<row;i++){
-        QString type=ui->tableWidget->item(i,1)->text();
-        QString value=ui->tableWidget->item(i,9)->text();
-        QString mins=ui->tableWidget->item(i,4)->text();
-        QString maxs=ui->tableWidget->item(i,5)->text();
-        QString def=ui->tableWidget->item(i,4)->text();
-        /*
-         *
-         *以下是部分完整性检查的实现误删！
-         *
-         *
-         */
-//        std::string svalue=value.toStdString();
-//        if(type=="Integer"){
-//            if(svalue.find('.')||checkdigit(svalue)==0){
-//                flag=2;
-//                wrongRow=i;
-//                break;
-//            }
-//            int num=std::stoi(svalue);
-//            if(mins!="NULL"){
-//                double minn=mins.toDouble();
-//                if(num<minn){
-//                    flag=3;
-//                    wrongRow=i;
-//                    break;
-//                }
-//            }
-//            if(maxs!="NULL"){
-//                double maxn=maxs.toDouble();
-//                if(num>maxn){
-//                    flag=3;
-//                    wrongRow=i;
-//                    break;
-//                }
-//            }
-//        }
-//        if(type=="Float"){
-//            if(checkdigit(svalue)==false){
-//                flag=2;
-//                wrongRow=i;
-//                break;
-//            }
-//            int num=std::stof(svalue);
-//            if(mins!="NULL"){
-//                double minn=mins.toDouble();
-//                if(num<minn){
-//                    flag=3;
-//                    wrongRow=i;
-//                    break;
-//                }
-//            }
-//            if(maxs!="NULL"){
-//                double maxn=maxs.toDouble();
-//                if(num>maxn){
-//                    flag=3;
-//                    wrongRow=i;
-//                    break;
-//                }
-//            }
-//        }
-        if(value==""&&def=="NULL"){
-            str.append("NULL");
-            if(i!=row-1){
-                str.append("|");
+        QString name=ui->tableWidget->item(i,0)->text();//字段名
+        QString type=ui->tableWidget->item(i,1)->text();//字段类型
+        QString value=ui->tableWidget->item(i,9)->text();//要插入的值
+        QString mins=ui->tableWidget->item(i,4)->text();//最大值（QString）
+        QString maxs=ui->tableWidget->item(i,5)->text();//最小值（QString）
+        QString def=ui->tableWidget->item(i,3)->text();//默认值
+        QString length=ui->tableWidget->item(i,2)->text();//字段长度
+        int pk=0,uk=0,nk=0;//主键，唯一键，非空
+        if(ui->tableWidget->item(i,6)!=NULL){
+            pk=1;
+        }
+        if(ui->tableWidget->item(i,7)!=NULL){
+            uk=1;
+        }
+        if(ui->tableWidget->item(i,8)!=NULL){
+            nk=1;
+        }
+        std::string svalue=value.toStdString();
+        if(type=="Integer"){
+            //判断是否是Integer类型
+            if(svalue.find('.')!=-1||checkdigit(svalue)==false){
+                flag=2;
+                wrongRow=i;
+                break;
+            }
+            int num=std::stoi(svalue);
+            qDebug()<<"num"<<num;
+            //判断是否符合最大值最小值
+            if(mins!="NULL"){
+                double minn=mins.toDouble();
+                if(num<minn){
+                    flag=3;
+                    wrongRow=i;
+                    break;
+                }
+            }
+            if(maxs!="NULL"){
+                double maxn=maxs.toDouble();
+                if(num>maxn){
+                    flag=3;
+                    wrongRow=i;
+                    break;
+                }
+            }
+        }
+        if(type=="Float"){
+            //判断是否是浮点数
+            if(checkdigit(svalue)==false){
+                flag=2;
+                wrongRow=i;
+                break;
+            }
+            double num=std::stof(svalue);
+            //判断是否符合最大值最小值
+            if(mins!="NULL"){
+                double minn=mins.toDouble();
+                if(num<minn){
+                    flag=3;
+                    wrongRow=i;
+                    break;
+                }
+            }
+            if(maxs!="NULL"){
+                double maxn=maxs.toDouble();
+                if(num>maxn){
+                    flag=3;
+                    wrongRow=i;
+                    break;
+                }
+            }
+        }
+        if(type=="Boolean"){
+            if(value=="true"||value=="True"||value=="TRUE"){
+                value="1";
+            }
+            if(value=="false"||value=="False"||value=="FALSE"){
+                value="0";
+            }
+            if(value!='1'&&value!='0'){
+                flag=2;
+                wrongRow=i;
+                break;
+            }
+        }
+        if(type=="Varchar"){
+            if(length!="NULL"){
+                double len=length.toDouble();
+                if(value.size()>len){
+                    flag=3;
+                    wrongRow=i;
+                    break;
+                }
+            }
+        }
+
+        //如果当前值为空有默认值则补上默认值
+        if(value==""){
+            if(def!="NULL"){
+                str.append(def);
+                if(i!=row-1){
+                    str.append("|");
+                }
+            }else{
+                if(pk==1||nk==1){
+                    flag=4;
+                    wrongRow=i;
+                    break;
+                }else{
+                    str.append("NULL");
+                    if(i!=row-1){
+                        str.append("|");
+                    }
+                }
             }
         }
         else{
-            str.append(value);
-            if(i!=row-1){
-                str.append("|");
+            bool check=true;
+            if(pk==1||uk==1){
+                check=checkUnique(value,i);
             }
+            if(check==true){
+                str.append(value);
+                if(i!=row-1){
+                    str.append("|");
+                }
+            }else{
+                flag=4;
+                wrongRow=i;
+                break;
+            }
+
         }
     }
 
     //TODU读取文件确认主键、最小值最大值唯一性非空性是否满足
     if(flag==1){
-        //TODO写入文件
-        //qDebug()<<"write"<<endl;
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("插入成功！"));
+        //在此生成SQL语句？
         writeFile(str);
     }else{
+        qDebug()<<"wrongRow"<<wrongRow;
+        std::string prompt="第";
+        prompt+=std::to_string(wrongRow);
         switch(flag){
+            case 2:
+                prompt+="行违反了类型约束";
+                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                break;
+            case 3:
+                prompt+="行违反了检查约束";
+                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                break;
+            case 4:
+                prompt+="行违反了键约束";
+                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                break;
             default:
-                std::string prompt="第";
-                prompt+=wrongRow;
                 prompt+="行违反了完整性约束";
                 QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
                 break;
@@ -200,6 +275,31 @@ void RecordInsert::on_button_reset(){
 bool RecordInsert::checkdigit(std::string svalue){
     for(int i=0;i<svalue.size();i++){
         if(std::isdigit(svalue[i])==0){
+            return false;
+        }
+    }
+    return true;
+}
+
+//判断你是否唯一
+bool RecordInsert::checkUnique(QString value,int row){
+    QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_tic = rdirname + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream rstream (&tic);
+    QStringList recordList;
+    QString records;
+    while(!rstream.atEnd()){
+        rstream>>records;
+        recordList=records.split("|");
+        //如果当前插入的记录值与已存在记录值相同则返回false
+        if(recordList[row]==value){
+            tic.close();
             return false;
         }
     }
