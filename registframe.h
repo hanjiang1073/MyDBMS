@@ -17,7 +17,7 @@ public:
     explicit RegistFrame(QWidget *parent = nullptr);
     ~RegistFrame();
 signals:
-    void confirm(QString);
+    void confirm(QString,QString,QString,QString,QString);
 private:
     Ui::RegistFrame *ui;
 public slots:

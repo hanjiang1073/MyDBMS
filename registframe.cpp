@@ -49,6 +49,6 @@ void RegistFrame::btn_confirm_clicked(){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该用户已存在！"));
     }
     QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("注册成功！"));
-    emit(confirm(name));
+    emit(confirm(name,dba,create,update,dele));
     this->close();
 }
