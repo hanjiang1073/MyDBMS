@@ -25,6 +25,15 @@ qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1
     return true;
 }
 
+////写入tic文件
+//void TFile::writeFileTIC(QString str,QString user,QString kuname,QString biaoname){
+//    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+//    QString filename_tic = dirname + '/' + biaoname + ".tic";
+//    QFile tic(filename_tic);
+//    tic.open(QIODevice::Append);
+//    QDataStream stream (&tic);
+//    stream<<str;
+//}
 
 //添加表日志
 bool TFile::addTBRecord(int type, QString username, QString baseName, QString tbname,QString sql)

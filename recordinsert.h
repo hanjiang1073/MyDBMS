@@ -27,6 +27,7 @@ public:
     void writeFile(QString str);//写入文件
     bool checkdigit(std::string svalue);//判断是否是数字
     bool checkUnique(QString value,int row);//判断是否唯一
+    void changeLabel(QString text);
 private:
     Ui::RecordInsert *ui;
 private slots:

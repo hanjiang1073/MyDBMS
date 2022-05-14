@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>110</y>
+     <y>90</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -27,7 +27,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>200</y>
+     <y>230</y>
      <width>211</width>
      <height>28</height>
     </rect>
@@ -46,7 +46,7 @@
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>150</y>
+     <y>130</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -56,7 +56,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>60</y>
+     <y>40</y>
      <width>251</width>
      <height>31</height>
     </rect>
@@ -75,7 +75,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>150</y>
+     <y>130</y>
      <width>72</width>
      <height>15</height>
     </rect>
@@ -94,7 +94,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>110</y>
+     <y>90</y>
      <width>72</width>
      <height>15</height>
     </rect>
@@ -109,7 +109,79 @@
     <string>用户名：</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="dbaCheck">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>170</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>管理员</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="createCheck">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>170</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>创建权限</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="updateCheck">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>200</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>修改权限</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="deleteCheck">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>200</y>
+     <width>91</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>删除权限</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>dbaCheck</sender>
+   <signal>clicked()</signal>
+   <receiver>RegistFrame</receiver>
+   <slot>on_checkBox_dba()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>76</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>on_checkBox_dba()</slot>
+ </slots>
 </ui>

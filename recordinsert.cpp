@@ -48,7 +48,6 @@ void RecordInsert::initTableWidget(){
     //将值分解后写入单元格
     while(!stream.atEnd()){
         int RowCont=ui->tableWidget->rowCount();
-//qDebug()<<"RowCont:"<<RowCont;
         ui->tableWidget->setRowCount(RowCont+1);//增加一行
         stream>>str;
 
@@ -90,6 +89,10 @@ void RecordInsert::writeFile(QString str){
     stream<<str;
 }
 
+//修改label标签
+void RecordInsert::changeLabel(QString text){
+    ui->label->setText(text);
+}
 //确认按钮
 void RecordInsert::on_button_confirm(){
     int row=ui->tableWidget->rowCount();

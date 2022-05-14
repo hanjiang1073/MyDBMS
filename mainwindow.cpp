@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     createMenu();
-    createTreeWidget();
+    createWidget();
     lf=new LoginFrame();
     lf->show();
 
@@ -34,9 +34,11 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
     connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
-    connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(get_row_and_col(int,int)));
+//    connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(get_row_and_col(int,int)));
     //    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
+    connect(ui->actionscj,&QAction::triggered,this,&MainWindow::on_actionScj_triggered);    //删除记录
+    connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //删除记录
 }
 
 
@@ -80,6 +82,7 @@ void MainWindow::on_actionExit_triggered()
 {
     this->close();
 }
+
 //有条件退出
 void MainWindow::closeEvent(QCloseEvent* event)
 {
@@ -99,10 +102,12 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
-void MainWindow::createTreeWidget(){
+//创建库标栏、主界面点击响应
+void MainWindow::createWidget(){
     //Item点击事件的连接
     connect(ui->treeWidget,SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),this,SLOT(slotDoubleClickItem(QTreeWidgetItem *, int)));
     connect(ui->treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this,SLOT(slotClickItem(QTreeWidgetItem*,int)));
+    connect(ui->tableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slotClickTableItem(int,int)));
 }
 
 //新建库槽函数
@@ -115,6 +120,7 @@ void MainWindow::on_actionXjk_triggered(){
     Ku->setText(0,QStringLiteral("请输入名称"));
     kuItem=Ku;
 }
+
 //新建表槽函数
 void MainWindow::on_actionXjb_triggered(){
     if(kuItem!=NULL){
@@ -160,6 +166,69 @@ void MainWindow::on_actionCrj_triggered(){
         ri->show();
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+}
+
+//删除记录
+void MainWindow::on_actionScj_triggered(){
+    if(recordTable==true){
+
+        QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+        QString filename_tic = recdir + '/' + biaoname + ".tic";
+        QFile tic(filename_tic);
+        tic.seek(0);
+        if(tic.open(QIODevice::ReadOnly))
+        {
+            qDebug()<<"文件打开成功";
+        }
+        QDataStream rstream (&tic);
+        QString rstr;
+        QStringList rstrlist;
+        int m=0;
+        //取出各记录除选中记录外
+        while(!rstream.atEnd()){
+            rstream>>rstr;
+            if(m==recordRow){
+                m++;
+                continue;
+            }else{
+                qDebug()<<"rstr"<<rstr;
+                rstrlist.append(rstr);
+            }
+            m++;
+        }
+        tic.close();
+        qDebug()<<"rstrlist"<<rstrlist;
+        //重新写入
+        QFile wtic(filename_tic);
+        wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+        wtic.open(QFile::Append);
+        wtic.seek(0);
+        QDataStream wstream (&wtic);
+        for(int i=0;i<rstrlist.size();i++){
+            wstream<<rstrlist[i];
+        }
+        wtic.close();
+    }else{
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择记录!"));
+    }
+}
+
+//修改记录
+void MainWindow::on_actionXgj_triggered(){
+    if(recordTable==true){
+        on_actionScj_triggered();
+        ri=new RecordInsert();
+        ri->biaoItem=this->biaoItem;
+        ri->biaoname=this->biaoItem->text(0);
+        ri->kuItem=this->biaoItem->parent();
+        ri->kuname=this->biaoItem->parent()->text(0);
+        ri->user=this->user;
+        ri->changeLabel(QStringLiteral("修改记录"));
+        ri->initTableWidget();
+        ri->show();
+    }else{
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择记录!"));
     }
 }
 
@@ -216,7 +285,7 @@ void MainWindow::slotFinishEdit(){
     }
 }
 
-//单击（选中）槽函数
+//单击（选中）库表槽函数
 void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     QTreeWidgetItem *p=NULL;
     p=item->parent();
@@ -237,6 +306,19 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     }
 }
 
+//双击选中记录槽函数
+void MainWindow::slotClickTableItem(int row,int column){
+    //判断当前已打开记录界面而非字段界面
+    if(recordTable==true){
+        this->recordRow=row;
+        qDebug()<<"recordRow"<<recordRow;
+    }else
+    {
+        this->tableRow=row;
+        qDebug()<<"tableRow"<<tableRow;
+    }
+}
+
 //展开库
 void MainWindow::on_actionDkk_triggered(){
     if(kuItem!=NULL){
@@ -246,6 +328,7 @@ void MainWindow::on_actionDkk_triggered(){
 
 //显示图表(字段)
 void MainWindow::showTableWidget(){
+    recordTable=false;
     //先清空
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
@@ -313,59 +396,87 @@ qDebug()<<"进入循环了！";
 
 }
 
-void MainWindow::get_row_and_col(int row,int col)
-{
-    this->row=row;
-}
-
 /**
  * @brief 删除字段
  */
 void MainWindow::on_actionscd_triggered(){
     if(this->biaoItem!=NULL){
-        if(row==NULL)
+        if(tableRow==-1)
         {
             QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要删除的字段!"));
         }
         else
         {
-            //删除记录
+            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+            //删除记录中该字段
+            QString filename_tic = dirname + '/' + biaoname + ".tic";
+            QFile tic(filename_tic);
+            if(tic.open(QIODevice::ReadOnly))
+            {
+                qDebug()<<"文件打开成功";
+            }
+            tic.seek(0);
+            QDataStream rstream (&tic);
+            QString rstr;
+            QStringList rstrlist;//放每一条记录
+            QStringList pstrlist;//放一条记录里的所有字段
 
-
-
-
+            while(!rstream.atEnd())
+            {
+                rstream>>rstr;
+                pstrlist=rstr.split("|");
+                pstrlist.removeAt(tableRow);//删除动作
+                rstr=pstrlist.join("|");
+                rstrlist.append(rstr);
+            }
+            tic.close();
+            //重新写入
+            QFile wtic(filename_tic);
+            wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+//            wtic.open(QFile::Append);
+            wtic.seek(0);
+            QDataStream wstream (&wtic);
+            for(int i=0;i<rstrlist.size();i++){
+                wstream<<rstrlist[i];
+            }
+            wtic.close();
+qDebug()<<"结束删除记录中的字段，准备开始删除字段----------------------";
 
             //删除字段
-            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
             QString filename_tdf = dirname + '/' + biaoname + ".tdf";
             QFile tdf(filename_tdf);
-            tdf.seek(0);
-            if(tdf.open(QIODevice::ReadWrite))
+            if(tdf.open(QIODevice::ReadOnly))
             {
         qDebug()<<"文件打开成功";
             }
+            tdf.seek(0);
             QDataStream stream (&tdf);
+            QString str;
             QStringList strlist;
             int i=0;
 
             while(!stream.atEnd())
             {
-                stream>>strlist[i];
+                stream>>str;
+                strlist.append(str);
                 i++;
             }
-
-            tdf.seek(0);
-            i=0;
-            while(!stream.atEnd())
-            {
-                if(i!=row)       //读到要删除的那一行
-                {
-                    stream<<strlist[i];
-                }
-                i++;
-            }
-
             tdf.close();
+
+            //重新写入
+            QFile wtdf(filename_tdf);
+            wtdf.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+            wtdf.seek(0);
+            QDataStream wtdfstream(&wtdf);
+
+            for(i=0;i<strlist.size();i++)
+            {
+                if(i!=tableRow)       //读到要删除的那一行
+                {
+                    wtdfstream<<strlist[i];
+                }
+            }
+            wtdf.close();
         }
 
 
@@ -384,6 +495,7 @@ void MainWindow::on_actionscd_triggered(){
 
 //打开表
 void MainWindow::showRecord(){
+    recordTable=true;
     if(biaoname==""){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
     }
