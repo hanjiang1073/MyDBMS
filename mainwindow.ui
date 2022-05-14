@@ -55,7 +55,6 @@
     </property>
     <addaction name="actioncha"/>
     <addaction name="actionrizhi"/>
-    <addaction name="actionsave"/>
     <addaction name="actionquit"/>
    </widget>
    <widget class="QMenu" name="menu_K">

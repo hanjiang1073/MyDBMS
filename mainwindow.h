@@ -20,6 +20,7 @@
 #include "queryframe.h"
 #include"blogframe.h"
 #include"sql.h"
+#include "rightframe.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +42,10 @@ public:
 private:
     Ui::MainWindow *ui;
     QString user;//当前用户
+    bool dbaright;//标志当前是否为dba
+    bool createright;//标志是否有创建权限
+    bool updateright;//标志是否有修改权限
+    bool deleright;//标志是否有删除权限
     QString kuname;
     QString biaoname;
     LoginFrame *lf;//登入窗口
@@ -66,12 +71,14 @@ private slots:
     void on_actionscd_triggered();
     void on_actionXgj_triggered();
     void on_actionScj_triggered();
+    void on_actionQx_triggered();
     void forTjc(QString values);//条件查询接收子窗口信号的函数
     void slotClickItem(QTreeWidgetItem *item,int col);//单击选择库、表
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
-    void initall(QString name);//用户登入初始化库表
+    void initall(QString name,QString dba,QString create,QString update,QString dele);//用户登入初始化库表
     void showRecord();//打开表（记录）
     void slotClickTableItem(int row,int column);//双击选中记录
+    void changeRight(bool dba,bool create,bool update,bool dele);
 };
 #endif // MAINWINDOW_H

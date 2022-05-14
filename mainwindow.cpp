@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
         qDebug() << "here"<<1;
     }
-    connect(lf,SIGNAL(login(QString)),this,SLOT(initall(QString)));
+    connect(lf,SIGNAL(login(QString,QString,QString,QString,QString)),this,SLOT(initall(QString,QString,QString,QString,QString)));
 
 }
 
@@ -39,12 +39,34 @@ void MainWindow::createMenu(){
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
     connect(ui->actionscj,&QAction::triggered,this,&MainWindow::on_actionScj_triggered);    //删除记录
     connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //删除记录
+    connect(ui->actionqx,&QAction::triggered,this,&MainWindow::on_actionQx_triggered);      //权限与安全
 }
 
 
 //根据当前用户初始化所有信息
-void MainWindow::initall(QString name){
+void MainWindow::initall(QString name,QString dba,QString create,QString update,QString dele){
     this->user=name;
+    this->dbaright=dba=="1"?true:false;
+    this->createright=create=="1"?true:false;
+    this->updateright=update=="1"?true:false;
+    this->deleright=dele=="1"?true:false;
+
+    //根据各权限设置功能
+    if(createright==false&&dbaright==false){
+        ui->actionxjk->setEnabled(false);
+        ui->actionxjb->setEnabled(false);
+    }
+    if(updateright==false&&dbaright==false){
+        ui->actionxgd->setEnabled(false);
+        ui->actionxgj->setEnabled(false);
+    }
+    if(deleright==false&&dbaright==false){
+        ui->actionscb->setEnabled(false);
+        ui->actionscd->setEnabled(false);
+        ui->actionscj->setEnabled(false);
+        ui->actionsck->setEnabled(false);
+    }
+
     //TODO根据user名加载出这个用户已经存在的库、表
     QString dirname="D:/MyDataBase/"+ user;
     QDir dir(dirname);
@@ -728,4 +750,42 @@ void MainWindow::on_actionrizhi_triggered()
    }
    blog->show();
    qDebug()<<2;
+}
+
+//权限与安全
+void MainWindow::on_actionQx_triggered(){
+    if(dbaright==false){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("不是管理员无法设置权限!"));
+    }else{
+        RightFrame *rf=new RightFrame();
+        rf->initWidget();
+        rf->user=user;
+        rf->show();
+        connect(rf,SIGNAL(change(bool,bool,bool,bool)),this,SLOT(changeRight(bool,bool,bool,bool)));
+
+    }
+}
+
+//修改当前用户的权限（并非在文件中修改）
+void MainWindow::changeRight(bool dba,bool create,bool update,bool dele){
+    dbaright=dba;
+    createright=create;
+    updateright=update;
+    deleright=dele;
+    //根据各权限设置功能
+    if(createright==false&&dbaright==false){
+        ui->actionxjk->setEnabled(false);
+        ui->actionxjb->setEnabled(false);
+    }
+    if(updateright==false&&dbaright==false){
+        ui->actionxgd->setEnabled(false);
+        ui->actionxgj->setEnabled(false);
+    }
+    if(deleright==false&&dbaright==false){
+        ui->actionscb->setEnabled(false);
+        ui->actionscd->setEnabled(false);
+        ui->actionscj->setEnabled(false);
+        ui->actionsck->setEnabled(false);
+    }
+
 }

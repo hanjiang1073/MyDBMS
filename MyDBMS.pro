@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     queryframe.cpp \
+    rightframe.cpp \
     tfile.cpp\
     recordinsert.cpp \
     registframe.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     loginframe.h \
     mainwindow.h \
     queryframe.h \
+    rightframe.h \
     tfile.h\
     recordinsert.h \
     registframe.h \
@@ -40,6 +42,7 @@ FORMS += \
     queryframe.ui \
     recordinsert.ui \
     registframe.ui \
+    rightframe.ui \
     tabledesign.ui
 
 # Default rules for deployment.
