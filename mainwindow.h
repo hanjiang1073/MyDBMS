@@ -43,6 +43,7 @@ private:
     QString user;//当前用户
     QString kuname;
     QString biaoname;
+    int row;     //存放鼠标点击tablewidgrt的行
     LoginFrame *lf;//登入窗口
     TableDesign *td;//字段设计窗口
     RecordInsert *ri;//记录窗口
@@ -66,6 +67,7 @@ private slots:
     void slotClickItem(QTreeWidgetItem *item,int col);//单击事件
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
     void slotFinishEdit();//配合双击改名并存储的
+    void get_row_and_col(int,int);//点击单元格，获得行和列
     void initall(QString name);
     void showRecord();
 };

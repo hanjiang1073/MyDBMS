@@ -34,7 +34,8 @@ void MainWindow::createMenu(){
     connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
     connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
     connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
-//    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
+    connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(get_row_and_col(int,int)));
+    //    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
 }
 
@@ -283,7 +284,6 @@ qDebug()<<"文件打开成功";
 qDebug()<<"进入循环了！";
         int RowCont;
         RowCont=ui->tableWidget->rowCount();
-//qDebug()<<"RowCont:"<<RowCont;
         ui->tableWidget->setRowCount(RowCont+1);//增加一行
         stream>>str;
 
@@ -313,12 +313,61 @@ qDebug()<<"进入循环了！";
 
 }
 
+void MainWindow::get_row_and_col(int row,int col)
+{
+    this->row=row;
+}
+
 /**
  * @brief 删除字段
  */
 void MainWindow::on_actionscd_triggered(){
     if(this->biaoItem!=NULL){
-        int number;//可以直接输入一个序号，也可以通过sql命令传回一个序号
+        if(row==NULL)
+        {
+            QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要删除的字段!"));
+        }
+        else
+        {
+            //删除记录
+
+
+
+
+
+            //删除字段
+            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+            QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+            QFile tdf(filename_tdf);
+            tdf.seek(0);
+            if(tdf.open(QIODevice::ReadWrite))
+            {
+        qDebug()<<"文件打开成功";
+            }
+            QDataStream stream (&tdf);
+            QStringList strlist;
+            int i=0;
+
+            while(!stream.atEnd())
+            {
+                stream>>strlist[i];
+                i++;
+            }
+
+            tdf.seek(0);
+            i=0;
+            while(!stream.atEnd())
+            {
+                if(i!=row)       //读到要删除的那一行
+                {
+                    stream<<strlist[i];
+                }
+                i++;
+            }
+
+            tdf.close();
+        }
+
 
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
