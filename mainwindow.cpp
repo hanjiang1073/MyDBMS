@@ -462,7 +462,6 @@ void MainWindow::on_actionscd_triggered(){
                 wstream<<rstrlist[i];
             }
             wtic.close();
-qDebug()<<"结束删除记录中的字段，准备开始删除字段----------------------";
 
             //删除字段
             QString filename_tdf = dirname + '/' + biaoname + ".tdf";
@@ -499,6 +498,7 @@ qDebug()<<"结束删除记录中的字段，准备开始删除字段------------
                 }
             }
             wtdf.close();
+            tableRow=-1;
         }
 
 
