@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "here"<<1;
     }
     connect(lf,SIGNAL(login(QString,QString,QString,QString,QString)),this,SLOT(initall(QString,QString,QString,QString,QString)));
-
 }
 
 MainWindow::~MainWindow()
@@ -499,6 +498,7 @@ void MainWindow::on_actionscd_triggered(){
             }
             wtdf.close();
             tableRow=-1;
+            showTableWidget();
         }
 
 
@@ -508,8 +508,78 @@ void MainWindow::on_actionscd_triggered(){
 }
 
 
+/**
+ * @brief 修改字段
+ */
+void MainWindow::on_actionxgd_triggered(){
+    if(this->biaoItem!=NULL){
+        if(tableRow==-1)
+        {
+            QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要修改的字段!"));
+        }else
+        {
+            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+            QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+            QFile tdf(filename_tdf);
+            if(tdf.open(QIODevice::ReadOnly))
+            {
+        qDebug()<<"文件打开成功";
+            }
+            tdf.seek(0);
+            QDataStream stream (&tdf);
+            QString str;
+            QStringList strlist;
+            int i=0;
 
+            while(!stream.atEnd())
+            {
+                stream>>str;
+                if(i==tableRow)//读到想要修改的行
+                {
+qDebug()<<"修改前的str："<<str;
+                    td=new TableDesign();
+                    td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
+                    td->kuname=this->kuname;
+                    td->biaoname=this->biaoname;
+                    td->user=this->user;
+                    td->willModify(str);
+                    td->show();
 
+                    int j=0;
+                    while(td->modifystr=="")//等待用户点击确定按钮
+                    {
+//j++;
+//qDebug()<<"我睡觉了"<<j<<"秒";
+                        QCoreApplication::processEvents();
+                    }
+                    str=td->modifystr;
+qDebug()<<"修改后的str："<<str;
+                }
+                strlist.append(str);
+                i++;
+            }
+            tdf.close();
+
+            //重新写入
+            QFile wtdf(filename_tdf);
+            wtdf.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+            wtdf.seek(0);
+            QDataStream wtdfstream(&wtdf);
+
+            for(i=0;i<strlist.size();i++)
+            {
+                wtdfstream<<strlist[i];
+            }
+            wtdf.close();
+            tableRow=-1;
+            td->modifystr="";
+            showTableWidget();
+        }
+    }else
+    {
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+}
 
 
 

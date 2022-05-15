@@ -20,8 +20,11 @@ public:
     QString user;//当前用户
     QString kuname;
     QString biaoname;
+    QString modifystr;//修改字段后的拼接句
     QTreeWidgetItem *kuItem=NULL;
     QTreeWidgetItem *biaoItem=NULL;
+    bool isModify;
+    void willModify(QString strlist);//修改记录
 private:
     Ui::TableDesign *ui;
 

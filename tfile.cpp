@@ -87,3 +87,11 @@ bool TFile::createTable(QString username,QString basename,QString tbname)
         //报错
     }
 }
+
+//bool TFile::modifytabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com)
+//{
+//    QString pk1= QString::number(pk);
+//    QString non1=QString::number(non);
+//    QString un1=QString::number(un);
+//    modifystr=name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1+"|"+com;
+//}

@@ -8,7 +8,8 @@ TableDesign::TableDesign(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->lenEdit->setDisabled(true);
-
+    modifystr="";
+    isModify=false;
 }
 
 TableDesign::~TableDesign()
@@ -75,35 +76,40 @@ void TableDesign::on_button_confirm(){
         if(str2=="")
         {
             str2="NULL";
-qDebug()<<"com为空";
         }
         if(str3=="")
         {
             str3="NULL";
-qDebug()<<"len为空";
         }
         if(str4=="")
         {
             str4="NULL";
-qDebug()<<"def为空";
         }
         if(str5=="")
         {
             str5="NULL";
-qDebug()<<"min为空";
         }
         if(str6=="")
         {
             str6="NULL";
-qDebug()<<"max为空";
         }
 
         qDebug()<<"t1,t2,t3"<<t1<<t2<<t3;
         //TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
-       SQL().TDesign(this->user,this->kuname,this->biaoname,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+        if(!isModify)//添加字段
+        {
+            SQL().TDesign(this->user,this->kuname,this->biaoname,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+        }else       //修改字段
+        {
+            QString pk= QString::number(t1);
+            QString non=QString::number(t2);
+            QString un=QString::number(t3);
+            modifystr=str1+"|"+str7+"|"+str3+"|"+str4+"|"+str5+"|"+str6+"|"+pk+"|"+non+"|"+un+"|"+str2;
+            isModify=false;
+        }
+
         //关闭窗口
         this->close();
-qDebug()<<"user:"<<user;
     }
 }
 
@@ -119,3 +125,28 @@ void TableDesign::on_button_reset(){
     ui->nonCheck->setChecked(false);
     ui->unCheck->setChecked(false);
 }
+
+/**
+ * @brief 将要修改的值先填入窗口中
+ * @param str
+ */
+void TableDesign::willModify(QString str){
+    QStringList strlist=str.split("|");
+    ui->nameEdit->setText(strlist[0]);
+    if(strlist[1]=="Integer")ui->typeButton->setCurrentIndex(0);
+    else if(strlist[1]=="Varchar")ui->typeButton->setCurrentIndex(1);
+    else if(strlist[1]=="Float")ui->typeButton->setCurrentIndex(2);
+    else if(strlist[1]=="Boolean")ui->typeButton->setCurrentIndex(3);
+    else if(strlist[1]=="Date")ui->typeButton->setCurrentIndex(4);
+    ui->lenEdit->setText(strlist[2]);
+    ui->defaultEdit->setText(strlist[3]);
+    ui->minnEdit->setText(strlist[4]);
+    ui->maxnEdit->setText(strlist[5]);
+    if(strlist[6]=="1")ui->pkCheck->setChecked(true);
+    if(strlist[7]=="1")ui->unCheck->setChecked(true);
+    if(strlist[8]=="1")ui->nonCheck->setChecked(true);
+    ui->comEdit->setText(strlist[9]);
+    isModify=true;
+}
+
+

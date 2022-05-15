@@ -9,6 +9,7 @@
 #include <QTreeWidgetItem>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QThread>
 #include "loginframe.h"
 #include <QIcon>
 #include <QLineEdit>
@@ -21,6 +22,7 @@
 #include"blogframe.h"
 #include"sql.h"
 #include "rightframe.h"
+
 
 
 QT_BEGIN_NAMESPACE
@@ -69,6 +71,7 @@ private slots:
     void on_actionTjc_triggered();
     void on_actionrizhi_triggered();
     void on_actionscd_triggered();
+    void on_actionxgd_triggered();
     void on_actionXgj_triggered();
     void on_actionScj_triggered();
     void on_actionQx_triggered();
