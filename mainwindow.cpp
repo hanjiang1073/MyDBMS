@@ -49,7 +49,7 @@ void MainWindow::initall(QString name,QString dba,QString create,QString update,
     this->createright=create=="1"?true:false;
     this->updateright=update=="1"?true:false;
     this->deleright=dele=="1"?true:false;
-
+    qDebug()<<dbaright<<createright<<updateright<<deleright;
     //根据各权限设置功能
     if(createright==false&&dbaright==false){
         ui->actionxjk->setEnabled(false);

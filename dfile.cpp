@@ -127,7 +127,10 @@ bool DFile::createUser(QString username, QString secret,QString dba,QString crea
 int DFile::userexist(QString username, QString secret)
 {
     QFile userf("D:/MyDataBase/ID.nf");
-    userf.open(QIODevice::ReadWrite);
+    if(userf.open(QIODevice::ReadOnly)){
+        qDebug()<<"OPEN";
+    }
+    userf.seek(0);
     QDataStream stream (&userf);
 
     QString ID;
