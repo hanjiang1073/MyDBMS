@@ -194,42 +194,7 @@ void MainWindow::on_actionCrj_triggered(){
 void MainWindow::on_actionScj_triggered(){
     if(recordTable==true){
 
-        QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-        QString filename_tic = recdir + '/' + biaoname + ".tic";
-        QFile tic(filename_tic);
-        tic.seek(0);
-        if(tic.open(QIODevice::ReadOnly))
-        {
-            qDebug()<<"文件打开成功";
-        }
-        QDataStream rstream (&tic);
-        QString rstr;
-        QStringList rstrlist;
-        int m=0;
-        //取出各记录除选中记录外
-        while(!rstream.atEnd()){
-            rstream>>rstr;
-            if(m==recordRow){
-                m++;
-                continue;
-            }else{
-                qDebug()<<"rstr"<<rstr;
-                rstrlist.append(rstr);
-            }
-            m++;
-        }
-        tic.close();
-        qDebug()<<"rstrlist"<<rstrlist;
-        //重新写入
-        QFile wtic(filename_tic);
-        wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
-        wtic.open(QFile::Append);
-        wtic.seek(0);
-        QDataStream wstream (&wtic);
-        for(int i=0;i<rstrlist.size();i++){
-            wstream<<rstrlist[i];
-        }
-        wtic.close();
+         SQL().deleteRecord(this->user,this->kuname,this->biaoname,this->recordRow);
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择记录!"));
     }
@@ -521,6 +486,7 @@ void MainWindow::on_actionxgd_triggered(){
             QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
             QString filename_tdf = dirname + '/' + biaoname + ".tdf";
             QFile tdf(filename_tdf);
+
             if(tdf.open(QIODevice::ReadOnly))
             {
         qDebug()<<"文件打开成功";
@@ -528,6 +494,8 @@ void MainWindow::on_actionxgd_triggered(){
             tdf.seek(0);
             QDataStream stream (&tdf);
             QString str;
+            QString str2;
+            QString str1;
             QStringList strlist;
             int i=0;
 
@@ -537,6 +505,7 @@ void MainWindow::on_actionxgd_triggered(){
                 if(i==tableRow)//读到想要修改的行
                 {
 qDebug()<<"修改前的str："<<str;
+                    str1=str.split("|").at(0);//用于sql语句生成
                     td=new TableDesign();
                     td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
                     td->kuname=this->kuname;
@@ -544,7 +513,6 @@ qDebug()<<"修改前的str："<<str;
                     td->user=this->user;
                     td->willModify(str);
                     td->show();
-
                     int j=0;
                     while(td->modifystr=="")//等待用户点击确定按钮
                     {
@@ -553,13 +521,14 @@ qDebug()<<"修改前的str："<<str;
                         QCoreApplication::processEvents();
                     }
                     str=td->modifystr;
+                    str2=str.split("|").at(0);//用于sql语句生成
 qDebug()<<"修改后的str："<<str;
                 }
                 strlist.append(str);
                 i++;
             }
             tdf.close();
-
+            SQL().ModifyDesign(user,kuname,biaoname,str1,str2);
             //重新写入
             QFile wtdf(filename_tdf);
             wtdf.open(QFile::WriteOnly|QIODevice::Truncate);//先清空

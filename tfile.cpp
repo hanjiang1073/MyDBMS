@@ -1,8 +1,49 @@
 ﻿#include "tfile.h"
 #include <QDataStream>
+#include "recordinsert.h"
 TFile::TFile()
 {
 
+}
+
+bool TFile::deleteRecord(QString user, QString kuname, QString biaoname, int recordRow)
+{
+    QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+    QString filename_tic = recdir + '/' + biaoname + ".tic";
+    QFile tic(filename_tic);
+    tic.seek(0);
+    if(tic.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"文件打开成功";
+    }
+    QDataStream rstream (&tic);
+    QString rstr;
+    QStringList rstrlist;
+    int m=0;
+    //取出各记录除选中记录外
+    while(!rstream.atEnd()){
+        rstream>>rstr;
+        if(m==recordRow){
+            m++;
+            continue;
+        }else{
+            qDebug()<<"rstr"<<rstr;
+            rstrlist.append(rstr);
+        }
+        m++;
+    }
+    tic.close();
+    qDebug()<<"rstrlist"<<rstrlist;
+    //重新写入
+    QFile wtic(filename_tic);
+    wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
+    wtic.open(QFile::Append);
+    wtic.seek(0);
+    QDataStream wstream (&wtic);
+    for(int i=0;i<rstrlist.size();i++){
+        wstream<<rstrlist[i];
+    }
+    wtic.close();
 }
 
 bool TFile::tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com)

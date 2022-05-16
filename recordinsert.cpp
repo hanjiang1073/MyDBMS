@@ -1,6 +1,7 @@
 ﻿#include "recordinsert.h"
 #include "ui_recordinsert.h"
 #include <QDataStream>
+#include "sql.h"
 RecordInsert::RecordInsert(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RecordInsert)
@@ -80,7 +81,7 @@ void RecordInsert::initTableWidget(){
 }
 
 //写入文件
-void RecordInsert::writeFile(QString str){
+void RecordInsert::writeFile(QString str,QString user,QString kuname,QString biaoname){
     QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
     QString filename_tic = dirname + '/' + biaoname + ".tic";
     QFile tic(filename_tic);
@@ -98,9 +99,9 @@ void RecordInsert::on_button_confirm(){
     int row=ui->tableWidget->rowCount();
     int flag=1;//不妨用1表示合法，2表示违反类型约束，3表示违反检查约束,4不符合键约束
     int wrongRow=-1;
-    QString str;
     //判断当前插入的记录是否合法
     for(int i=0;i<row;i++){
+          QString str;
         QString name=ui->tableWidget->item(i,0)->text();//字段名
         QString type=ui->tableWidget->item(i,1)->text();//字段类型
         QString value=ui->tableWidget->item(i,9)->text();//要插入的值
@@ -200,9 +201,9 @@ void RecordInsert::on_button_confirm(){
         if(value==""){
             if(def!="NULL"){
                 str.append(def);
-                if(i!=row-1){
+              /*  if(i!=row-1){
                     str.append("|");
-                }
+                } */
             }else{
                 if(pk==1||nk==1){
                     flag=4;
@@ -210,9 +211,9 @@ void RecordInsert::on_button_confirm(){
                     break;
                 }else{
                     str.append("NULL");
-                    if(i!=row-1){
+                  /*  if(i!=row-1){
                         str.append("|");
-                    }
+                    } */
                 }
             }
         }
@@ -223,9 +224,9 @@ void RecordInsert::on_button_confirm(){
             }
             if(check==true){
                 str.append(value);
-                if(i!=row-1){
+               /* if(i!=row-1){
                     str.append("|");
-                }
+                } */
             }else{
                 flag=4;
                 wrongRow=i;
@@ -233,36 +234,37 @@ void RecordInsert::on_button_confirm(){
             }
 
         }
-    }
+         if(flag==1){
+             QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("插入成功！"));
+             SQL().InsertT(user,kuname,biaoname,name,value,str);//在此生成SQL语句
+            // writeFile(str);
+         }else{
+             qDebug()<<"wrongRow"<<wrongRow;
+             std::string prompt="第";
+             prompt+=std::to_string(wrongRow);
+             switch(flag){
+                 case 2:
+                     prompt+="行违反了类型约束";
+                     QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                     break;
+                 case 3:
+                     prompt+="行违反了检查约束";
+                     QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                     break;
+                 case 4:
+                     prompt+="行违反了键约束";
+                     QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                     break;
+                 default:
+                     prompt+="行违反了完整性约束";
+                     QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
+                     break;
+             }
+         }
+
 
     //TODU读取文件确认主键、最小值最大值唯一性非空性是否满足
-    if(flag==1){
-        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("插入成功！"));
-        //在此生成SQL语句？
-        writeFile(str);
-    }else{
-        qDebug()<<"wrongRow"<<wrongRow;
-        std::string prompt="第";
-        prompt+=std::to_string(wrongRow);
-        switch(flag){
-            case 2:
-                prompt+="行违反了类型约束";
-                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
-                break;
-            case 3:
-                prompt+="行违反了检查约束";
-                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
-                break;
-            case 4:
-                prompt+="行违反了键约束";
-                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
-                break;
-            default:
-                prompt+="行违反了完整性约束";
-                QMessageBox::information(this, QStringLiteral("提示"),QString::fromLocal8Bit(prompt.c_str()));
-                break;
-        }
-    }
+}
     this->close();
 }
 
