@@ -46,14 +46,14 @@
      <x>0</x>
      <y>0</y>
      <width>1132</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_S">
     <property name="title">
      <string>系统(S)</string>
     </property>
-    <addaction name="actioncha"/>
+    <addaction name="actioncky"/>
     <addaction name="actionrizhi"/>
     <addaction name="actionquit"/>
    </widget>
@@ -74,7 +74,6 @@
       <string>设计表(S)</string>
      </property>
      <addaction name="actioncrd"/>
-     <addaction name="actionckd"/>
      <addaction name="actionxgd"/>
      <addaction name="actionscd"/>
     </widget>
@@ -104,15 +103,22 @@
     </property>
     <addaction name="actiongy"/>
    </widget>
+   <widget class="QMenu" name="menuSQL">
+    <property name="title">
+     <string>SQL导入</string>
+    </property>
+    <addaction name="actionsql"/>
+   </widget>
    <addaction name="menu_S"/>
    <addaction name="menu_K"/>
    <addaction name="menu_B"/>
    <addaction name="menu_Q"/>
    <addaction name="menu_U"/>
+   <addaction name="menuSQL"/>
    <addaction name="menu_H"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actioncha">
+  <action name="actioncky">
    <property name="text">
     <string>查看用户(U)</string>
    </property>
@@ -213,6 +219,11 @@
   <action name="actionsave">
    <property name="text">
     <string>保存(S)</string>
+   </property>
+  </action>
+  <action name="actionsql">
+   <property name="text">
+    <string>导入脚本</string>
    </property>
   </action>
  </widget>

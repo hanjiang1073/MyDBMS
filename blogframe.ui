@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>50</y>
-     <width>151</width>
+     <width>171</width>
      <height>431</height>
     </rect>
    </property>
@@ -31,9 +31,9 @@
   <widget class="QTextBrowser" name="textBrowser">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>200</x>
      <y>50</y>
-     <width>281</width>
+     <width>381</width>
      <height>431</height>
     </rect>
    </property>
@@ -41,8 +41,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>0</y>
+     <x>20</x>
+     <y>10</y>
      <width>101</width>
      <height>31</height>
     </rect>

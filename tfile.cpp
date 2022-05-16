@@ -44,9 +44,10 @@ bool TFile::deleteRecord(QString user, QString kuname, QString biaoname, int rec
         wstream<<rstrlist[i];
     }
     wtic.close();
+    return true;
 }
 
-bool TFile::tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com)
+bool TFile::tabledesign(QString username,QString basename,QString tbname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool un,bool non,QString com)
 
 {
     QString dirname = "D:/MyDataBase/"+ username+'/' + basename+'/'+tbname;
@@ -60,8 +61,8 @@ bool TFile::tabledesign(QString username,QString basename,QString tbname,QString
     QString pk1= QString::number(pk);
     QString non1=QString::number(non);
     QString un1=QString::number(un);
-qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1+"|"+com;
-    stream<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+non1+"|"+un1+"|"+com;
+qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+un1+"|"+non1+"|"+com;
+    stream<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+un1+"|"+non1+"|"+com;
     tdf.close();
     return true;
 }

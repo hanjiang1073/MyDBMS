@@ -16,6 +16,7 @@ SOURCES += \
     mainwindow.cpp \
     queryframe.cpp \
     rightframe.cpp \
+    sqlinput.cpp \
     tfile.cpp\
     recordinsert.cpp \
     registframe.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     mainwindow.h \
     queryframe.h \
     rightframe.h \
+    sqlinput.h \
     tfile.h\
     recordinsert.h \
     registframe.h \
@@ -43,6 +45,7 @@ FORMS += \
     recordinsert.ui \
     registframe.ui \
     rightframe.ui \
+    sqlinput.ui \
     tabledesign.ui
 
 # Default rules for deployment.

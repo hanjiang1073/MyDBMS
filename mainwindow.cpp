@@ -37,8 +37,10 @@ void MainWindow::createMenu(){
     //    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
     //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
     connect(ui->actionscj,&QAction::triggered,this,&MainWindow::on_actionScj_triggered);    //删除记录
-    connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //删除记录
+    connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //修改记录
     connect(ui->actionqx,&QAction::triggered,this,&MainWindow::on_actionQx_triggered);      //权限与安全
+    connect(ui->actioncky,&QAction::triggered,this,&MainWindow::on_actionCky_triggered);    //条件查询
+    connect(ui->actionsql,&QAction::triggered,this,&MainWindow::on_actionSql_triggered);
 }
 
 
@@ -193,8 +195,8 @@ void MainWindow::on_actionCrj_triggered(){
 //删除记录
 void MainWindow::on_actionScj_triggered(){
     if(recordTable==true){
-
          SQL().deleteRecord(this->user,this->kuname,this->biaoname,this->recordRow);
+         TFile().deleteRecord(user,kuname,biaoname,recordRow);
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择记录!"));
     }
@@ -387,12 +389,14 @@ qDebug()<<"进入循环了！";
  */
 void MainWindow::on_actionscd_triggered(){
     if(this->biaoItem!=NULL){
+
         if(tableRow==-1)
         {
             QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要删除的字段!"));
         }
         else
         {
+            SQL().deleteField(user,kuname,biaoname,ui->tableWidget->item(tableRow,0)->text());
             QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
             //删除记录中该字段
             QString filename_tic = dirname + '/' + biaoname + ".tic";
@@ -416,6 +420,7 @@ void MainWindow::on_actionscd_triggered(){
                 rstrlist.append(rstr);
             }
             tic.close();
+
             //重新写入
             QFile wtic(filename_tic);
             wtic.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
@@ -516,19 +521,18 @@ qDebug()<<"修改前的str："<<str;
                     int j=0;
                     while(td->modifystr=="")//等待用户点击确定按钮
                     {
-//j++;
-//qDebug()<<"我睡觉了"<<j<<"秒";
                         QCoreApplication::processEvents();
                     }
                     str=td->modifystr;
-                    str2=str.split("|").at(0);//用于sql语句生成
+                    //生成sql
+                    SQL().ModifyDesign(user,kuname,biaoname,ui->tableWidget->item(tableRow,0)->text(),str);
 qDebug()<<"修改后的str："<<str;
                 }
                 strlist.append(str);
                 i++;
             }
             tdf.close();
-            SQL().ModifyDesign(user,kuname,biaoname,str1,str2);
+
             //重新写入
             QFile wtdf(filename_tdf);
             wtdf.open(QFile::WriteOnly|QIODevice::Truncate);//先清空
@@ -827,4 +831,51 @@ void MainWindow::changeRight(bool dba,bool create,bool update,bool dele){
         ui->actionsck->setEnabled(false);
     }
 
+}
+
+//查看当前用户的权限
+void MainWindow::on_actionCky_triggered(){
+    std::string str;
+    str+="当前用户名:"+user.toStdString()+"\n";
+    str+="所有权限:";
+    if(dbaright==true){
+        str+="管理员 ";
+    }
+    if(createright){
+        str+=" 创建权限";
+    }
+    if(updateright){
+        str+=" 创建权限";
+    }
+    if(deleright){
+        str+=" 创建权限";
+    }
+    QMessageBox::information(this, QStringLiteral("用户信息"),QString::fromLocal8Bit(str.c_str()));
+}
+
+//sql导入
+void MainWindow::on_actionSql_triggered(){
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setNameFilter(tr("File(*.txt*)"));
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    QStringList fileNames;
+    //获取选择的文件路径
+    if (fileDialog->exec()) {
+        fileNames = fileDialog->selectedFiles();
+    }
+
+    //获取选择到的文件
+    QFile inputFile(fileNames[0]);
+    if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QString line;
+        QTextStream in(&inputFile);  //用文件构造流
+        line = in.readLine();//读取一行放到字符串里
+        while(!line.isNull())//字符串有内容
+        {
+            qDebug() << line;
+            line=in.readLine();//循环读取下行
+        }
+    }
+    inputFile.close();
 }
