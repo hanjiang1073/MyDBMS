@@ -133,7 +133,9 @@ void MainWindow::createWidget(){
     connect(ui->tableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slotClickTableItem(int,int)));
 }
 
-//新建库槽函数
+/**
+ * @brief 新建库槽函数
+ */
 void MainWindow::on_actionXjk_triggered(){
     QTreeWidgetItem *Ku=new QTreeWidgetItem(ui->treeWidget);
     QIcon icon;
@@ -143,6 +145,24 @@ void MainWindow::on_actionXjk_triggered(){
     Ku->setText(0,QStringLiteral("请输入名称"));
     kuItem=Ku;
 }
+
+/**
+ * @brief 删除库
+ */
+void MainWindow::on_actionsck_triggered(){
+    if(kuItem!=NULL){
+        QString dirname = "D:/MyDataBase/"+ user+'/' + kuname;
+        QDir dir;
+        dir.setPath(dirname);
+        dir.removeRecursively();
+
+        delete kuItem;
+
+    }else{
+        QMessageBox::information(this,QStringLiteral("提示"),QStringLiteral("请先选择库!"));
+    }
+}
+
 
 //新建表槽函数
 void MainWindow::on_actionXjb_triggered(){
