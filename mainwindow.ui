@@ -56,6 +56,7 @@
     <addaction name="actioncky"/>
     <addaction name="actionrizhi"/>
     <addaction name="actionquit"/>
+    <addaction name="actionreload"/>
    </widget>
    <widget class="QMenu" name="menu_K">
     <property name="title">
@@ -224,6 +225,11 @@
   <action name="actionsql">
    <property name="text">
     <string>导入脚本</string>
+   </property>
+  </action>
+  <action name="actionreload">
+   <property name="text">
+    <string>重新加载</string>
    </property>
   </action>
  </widget>

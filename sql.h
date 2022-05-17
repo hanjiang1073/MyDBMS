@@ -26,6 +26,7 @@ public:
     void InsertT(QString user,QString kuname,QString biaoname,QString str2);//向表插入数据
     void TDesign(QString user,QString kuname,QString biaoname,QString name,QString type,QString len,QString def,QString min,QString max,bool pk,bool non,bool un,QString com);
     void deleteRecord(QString user,QString kuname ,QString biaoname,int);//生成删除记录
+
 };
 
 #endif // SQL_H

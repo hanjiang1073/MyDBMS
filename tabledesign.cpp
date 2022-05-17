@@ -2,6 +2,7 @@
 #include "ui_tabledesign.h"
 #include "tfile.h"
 #include"sql.h"
+#include "dfile.h"
 TableDesign::TableDesign(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TableDesign)

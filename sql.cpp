@@ -85,6 +85,7 @@ void SQL::InsertT(QString user,QString kuname ,QString biaoname,QString str2/*�
 
 }
 
+//创建库
 void SQL::CreateD(QString user,QString kuname)
 {
     QString biaoname;

@@ -40,7 +40,8 @@ void MainWindow::createMenu(){
     connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //修改记录
     connect(ui->actionqx,&QAction::triggered,this,&MainWindow::on_actionQx_triggered);      //权限与安全
     connect(ui->actioncky,&QAction::triggered,this,&MainWindow::on_actionCky_triggered);    //条件查询
-    connect(ui->actionsql,&QAction::triggered,this,&MainWindow::on_actionSql_triggered);
+    connect(ui->actionsql,&QAction::triggered,this,&MainWindow::on_actionSql_triggered);    //导入sql
+    connect(ui->actionreload,&QAction::triggered,this,&MainWindow::on_actionReload_triggered);
 }
 
 
@@ -250,6 +251,7 @@ void MainWindow::slotFinishEdit(){
         }else{
 
             doubleClickItem->setText(0,text);
+            //创建库
             if(doubleClickItem==kuItem)
             {
                 kuname=text;
@@ -257,6 +259,7 @@ void MainWindow::slotFinishEdit(){
                  SQL().CreateD(this->user,kuname);
                  DFile().addRecord(1,user,text);
             }
+            //创建表
             if(doubleClickItem==biaoItem)
             {
                  biaoname=text;
@@ -266,7 +269,7 @@ void MainWindow::slotFinishEdit(){
             }
             QMessageBox::StandardButton button;
             button = QMessageBox::question(this, QStringLiteral("提示"), QStringLiteral("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
-              //字段设计窗口//TODO这里应该将名称记录到对应数据字典中(在数据字典中无同名的情况下，如果同名则提示失败)
+
 
         }
         hasht[doubleClickItem]=1;
@@ -638,9 +641,6 @@ void MainWindow::on_actionTjc_triggered(){
 
 //条件查询的配套函数
 void MainWindow::forTjc(QString values){
-    if(biaoname==""){
-        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
-    }
     QStringList valueList;
     valueList=values.split("|");//查询的字段及相应信息
     //解析需要获取的字段
@@ -855,27 +855,41 @@ void MainWindow::on_actionCky_triggered(){
 
 //sql导入
 void MainWindow::on_actionSql_triggered(){
-    QFileDialog *fileDialog = new QFileDialog(this);
-    fileDialog->setNameFilter(tr("File(*.txt*)"));
-    fileDialog->setFileMode(QFileDialog::ExistingFile);
-    QStringList fileNames;
-    //获取选择的文件路径
-    if (fileDialog->exec()) {
-        fileNames = fileDialog->selectedFiles();
-    }
+    SqlInput *si=new SqlInput();
+    si->user=user;
+    si->show();
 
-    //获取选择到的文件
-    QFile inputFile(fileNames[0]);
-    if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QString line;
-        QTextStream in(&inputFile);  //用文件构造流
-        line = in.readLine();//读取一行放到字符串里
-        while(!line.isNull())//字符串有内容
-        {
-            qDebug() << line;
-            line=in.readLine();//循环读取下行
+}
+
+//重新加载
+void MainWindow::on_actionReload_triggered(){
+    ui->treeWidget->clear();
+    QString dirname="D:/MyDataBase/"+ user;
+    QDir dir(dirname);
+    QStringList names = dir.entryList(QDir::Dirs);
+    names.removeOne(".");
+    names.removeOne("..");
+    auto it=names.begin();
+    while(it!=names.end()){
+        QString kuname=*it;
+        //qDebug()<<*it<<endl;
+        on_actionXjk_triggered();
+        kuItem->setText(0,kuname);
+        hasht[kuItem]=1;
+
+        QString biaodirname="D:/MyDataBase/"+ user+"/"+kuname;
+        QDir biaodir(biaodirname);
+        QStringList biaonames = biaodir.entryList(QDir::Dirs);
+        biaonames.removeOne(".");
+        biaonames.removeOne("..");
+        auto biaoit=biaonames.begin();
+        while(biaoit!=biaonames.end()){
+            QString biaoname=*biaoit;
+            on_actionXjb_triggered();
+            biaoItem->setText(0,biaoname);
+            hasht[biaoItem]=1;
+            biaoit++;
         }
+        it++;
     }
-    inputFile.close();
 }
