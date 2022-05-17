@@ -163,6 +163,24 @@ void MainWindow::on_actionsck_triggered(){
     }
 }
 
+/**
+ * @brief 删除表
+ */
+void MainWindow::on_actionscb_triggered(){
+    if(this->biaoItem!=NULL){
+        QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+        QDir dir;
+        dir.setPath(dirname);
+        dir.removeRecursively();
+
+        delete biaoItem;
+
+        ui->tableWidget->clear();
+    }else{
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
+    }
+
+}
 
 //新建表槽函数
 void MainWindow::on_actionXjb_triggered(){
@@ -337,6 +355,7 @@ void MainWindow::on_actionDkk_triggered(){
 //显示图表(字段)
 void MainWindow::showTableWidget(){
     recordTable=false;
+    ui->tableWidget->show();
     //先清空
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
