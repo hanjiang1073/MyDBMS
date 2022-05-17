@@ -60,14 +60,102 @@ void SqlInput::sqlTran(QString str){
             }
             //条件查询
             if(list[5]=="select"){
+                //先读取该表有哪些字段
+                QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+                QString filename_tdf = dirname + '/' + tablename + ".tdf";
+                QFile tdf(filename_tdf);
+                tdf.seek(0);
+                tdf.open(QIODevice::ReadOnly);
+                QDataStream stream (&tdf);
+                QString str;
+                QStringList strlist;
+                if(stream.atEnd()){
+                    QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该表不存在字段！"));
+                    return;
+                }
+                int row=0;
+                QMap<QString,QString> hasht;//记录各字段查询条件
+                QStringList fields;//记录个字段
+                while(!stream.atEnd()){
+                    stream>>str;
+                    strlist=str.split("|");
+                    qDebug()<<strlist[0];
+                    hasht[strlist[0]]="NULL";
+                    fields.append(strlist[0]);
+                }
+                tdf.close();
+                int i=6;
+                QString confields="";//有条件的列
+                QString condition;//条件
+                int flag=0;
+                //所有列全要的情况
+                if(list[6]=="*"){
+                    for(int j=0;j<fields.size();j++){
+                        hasht[fields[j]]="*";
+                    }
+                    flag=2;
+                }else{
+                    //选择部分列的情况
+                    QStringList selfields=list[6].split(",");
+                    for(int j=0;j<selfields.size();j++){
+                        hasht[selfields[j]]="*";
+                    }
+                }
+                i++;
+                while(i<list.size()){
+                    if(list[i]=="and"){
+                        i++;
+                        continue;
+                    }
+                    if(list[i]=="where"){
+                        flag=1;
+                        i++;
+                        continue;
+                    }
+                    if(flag==1){
+                        if(confields==""){
+                            confields=list[i];
+                        }else{
+                            condition=list[i];
+                            condition.remove("=");
+                            condition.remove("in");
+                            condition.remove("[");
+                            condition.remove("]");
+                            hasht[confields]=condition;
+                            confields="";
+                        }
+                    }
+                    i++;
+                }
+                QString result;
+                //头部表示
+                result.append("sql");
+                result.append("|");
+                result.append(databasename);
+                result.append("|");
+                result.append(tablename);
+                result.append("|");
+                for(int i=0;i<fields.size();i++){
+                    if(hasht[fields[i]]!="NULL"){
+                        QString all=QString::number(i)+hasht[fields[i]];
+                        result.append(all);
+                        result.append("|");
+                    }
 
+                }
+                result.chop(1);//去除最后一个“|”
+                qDebug()<<result;
+                emit(query(result));
             }
         }
 
     }
     //删除库
     if(list[0]=="drop"){
-
+        QString dirname = "D:/MyDataBase/"+ user+'/' + list[2];
+        QDir dir;
+        dir.setPath(dirname);
+        dir.removeRecursively();
     }
 }
 //重置按钮

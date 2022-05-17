@@ -134,7 +134,9 @@ void MainWindow::createWidget(){
     connect(ui->tableWidget,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(slotClickTableItem(int,int)));
 }
 
-//新建库槽函数
+/**
+ * @brief 新建库槽函数
+ */
 void MainWindow::on_actionXjk_triggered(){
     QTreeWidgetItem *Ku=new QTreeWidgetItem(ui->treeWidget);
     QIcon icon;
@@ -144,6 +146,24 @@ void MainWindow::on_actionXjk_triggered(){
     Ku->setText(0,QStringLiteral("请输入名称"));
     kuItem=Ku;
 }
+
+/**
+ * @brief 删除库
+ */
+void MainWindow::on_actionsck_triggered(){
+    if(kuItem!=NULL){
+        QString dirname = "D:/MyDataBase/"+ user+'/' + kuname;
+        QDir dir;
+        dir.setPath(dirname);
+        dir.removeRecursively();
+
+        delete kuItem;
+
+    }else{
+        QMessageBox::information(this,QStringLiteral("提示"),QStringLiteral("请先选择库!"));
+    }
+}
+
 
 //新建表槽函数
 void MainWindow::on_actionXjb_triggered(){
@@ -641,8 +661,20 @@ void MainWindow::on_actionTjc_triggered(){
 
 //条件查询的配套函数
 void MainWindow::forTjc(QString values){
+    qDebug()<<values;
     QStringList valueList;
     valueList=values.split("|");//查询的字段及相应信息
+    if(biaoItem==NULL&&valueList[0]!="sql"){
+        QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表！"));
+    }
+    if(valueList[0]=="sql"){
+        kuname=valueList[1];
+        biaoname=valueList[2];
+        //去除表头
+        valueList.pop_front();
+        valueList.pop_front();
+        valueList.pop_front();
+    }
     //解析需要获取的字段
     std::vector<int> fields;
     for(int n=0;n<valueList.size();n++){
@@ -859,6 +891,8 @@ void MainWindow::on_actionSql_triggered(){
     si->user=user;
     si->show();
 
+    //查询的信号
+    connect(si,SIGNAL(query(QString)),this,SLOT(forTjc(QString)));
 }
 
 //重新加载

@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "sql.h"
 #include "tfile.h"
+#include <QMap>
 namespace Ui {
 class SqlInput;
 }
@@ -21,6 +22,8 @@ public:
     QString user;//用户名
     QString databasename;//库名
     QString tablename;//表名
+signals:
+    void query(QString);
 private:
     Ui::SqlInput *ui;
 private slots:

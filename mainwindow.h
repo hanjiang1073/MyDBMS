@@ -77,7 +77,11 @@ private slots:
     void on_actionQx_triggered();
     void on_actionCky_triggered();
     void on_actionSql_triggered();
+
     void on_actionReload_triggered();
+
+    void on_actionsck_triggered();
+
     void forTjc(QString values);//条件查询接收子窗口信号的函数
     void slotClickItem(QTreeWidgetItem *item,int col);//单击选择库、表
     void slotDoubleClickItem(QTreeWidgetItem *item, int col);//双击改名
