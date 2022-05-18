@@ -89,35 +89,35 @@ bool DFile::initialDataBase()
 
 
 }
-//用户授权
-void DFile::grantUser(QString username, QString dba,QString create, QString update, QString dele)
-{
-    QFile userf("D:/MyDataBase/ID.nf");
-    userf.open(QIODevice::ReadWrite);
-    QDataStream stream (&userf);
-    QString ID;
-    QString scrt;
-    QString str;
-    while(!stream.atEnd()){
-        stream >> ID;
-        stream >> scrt;
+////用户授权
+//void DFile::grantUser(QString username, QString dba,QString create, QString update, QString dele)
+//{
+//    QFile userf("D:/MyDataBase/ID.nf");
+//    userf.open(QIODevice::ReadWrite);
+//    QDataStream stream (&userf);
+//    QString ID;
+//    QString scrt;
+//    QString str;
+//    while(!stream.atEnd()){
+//        stream >> ID;
+//        stream >> scrt;
 
-        if(ID==username){
-             stream<<dba;
-             stream<<create;
-             stream<<update;
-             stream<<dele;
+//        if(ID==username){
+//             stream<<dba;
+//             stream<<create;
+//             stream<<update;
+//             stream<<dele;
 
-        }
+//        }
 
-        else{
-            continue;
-        }
-        for(int i=0;i<4;i++){
-               stream>>str;
-                    }
-    }
-}
+//        else{
+//            continue;
+//        }
+//        for(int i=0;i<4;i++){
+//               stream>>str;
+//                    }
+//    }
+//}
 
 //返回true创建成功，false表示已存在用户
 bool DFile::createUser(QString username, QString secret,QString dba,QString create,QString update,QString dele)

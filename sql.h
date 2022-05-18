@@ -19,7 +19,7 @@ public:
     void CreateT(QString user,QString kuname ,QString biaoname);
     void CreateD(QString user,QString kuname);
     void CreateU(QString user,QString kuname);
-    void GrantU(QString user,QString kuname ,QString biaoname,QString dba,QString createright,QString updateright, QString deleright);//用户授权
+    void GrantU(QString user,QString dba,QString createright,QString updateright, QString deleright);//用户授权
     void deleteT(QString user,QString kuname ,QString biaoname);
     void deleteField(QString user,QString kuname,QString biaoname,QString name);//删除字段
     void ModifyDesign(QString user,QString kuname ,QString biaoname,QString prevname,QString str2);//修改字段

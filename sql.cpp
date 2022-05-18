@@ -6,43 +6,24 @@ SQL::SQL()
 {
 
 }
-void SQL::GrantU(QString user, QString kuname,QString biaoname,QString dba, QString create, QString update, QString dele)//用户授权
+void SQL::GrantU(QString user,QString dba, QString create, QString update, QString dele)//用户授权
 {
     QString str="grant ";
-    if(dba=="1")
-    {
-        str=str+"dba ";
+    if(dba=="1"){
+        str+="dba ";
     }
-    else if(dba!="1")
-    {
-       str=str+"null ";
+
+    if(create=="1"){
+        str+="create ";
     }
-    else if(create=="1")
-    {
-       str=str+"create ";
+    if(update=="1"){
+        str+="update ";
     }
-    else if(create!="1")
-    {
-       str=str+"null ";
+    if(dele=="1"){
+        str+="dele ";
     }
-    else if(update=="1")
-    {
-        str=str+"update ";
-    }
-    else if(update!="1")
-    {
-        str=str+"null ";
-    }
-    else if(dele=="1")
-    {
-        str=str+"delete ";
-    }
-    else if(dele!="1")
-    {
-        str=str+"null ";
-    }
-     str=str+"to "+user;
-    this->Logic(str,user,kuname,biaoname);
+    str=str+"to "+user;
+    this->Logic(str,user,"NULL","NUNLL");
 }
 
 //修改字段
@@ -220,17 +201,6 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
            log.open(QIODevice::Append);
            QDataStream stream (&log);
             stream<<str1+sql+";";
-            QString dba,create,update,dele;
-            for(int i=0;i<list.size();i++)
-            {
-            if(list[i]=="dba") dba=="1";
-            if(list[i]=="create")  create=="1";
-            if(list[i]=="update") update=="1";
-            if(list[i]=="delete") dele=="1";
-              username=list[i];
-            }
-
-             DFile().grantUser(username,dba,create,update,dele);
             log.close();
 
 

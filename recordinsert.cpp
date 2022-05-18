@@ -242,7 +242,7 @@ void RecordInsert::on_button_confirm(){
     }else{
         qDebug()<<"wrongRow"<<wrongRow;
         std::string prompt="第";
-        prompt+=std::to_string(wrongRow);
+        prompt+=std::to_string(wrongRow+1);
         switch(flag){
             case 2:
                 prompt+="行违反了类型约束";
