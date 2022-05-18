@@ -218,7 +218,6 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        }
        else if(list[0]=="delete")
        {
-//           TFile().deleteRecord(user,kuname,biaoname,row);
            QString logName = "D:/MyDataBase/" + user+ "/" + kuname +"/" +biaoname+"/" +biaoname  + ".trd";
            QFile log (logName);
            log.open(QIODevice::Append);

@@ -32,6 +32,11 @@ void SqlInput::sqlTran(QString str){
         }
         //删除表
         if(list[3]=="drop"){
+            QString dirname = "D:/MyDataBase/"+ user+'/' +databasename+'/'+list[5];
+            QDir dir;
+            dir.setPath(dirname);
+            dir.removeRecursively();
+            SQL().deleteT(user,databasename,tablename);
 
         }
         //选择表
