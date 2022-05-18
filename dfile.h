@@ -15,7 +15,7 @@ public:
 static int createDataBase(QString baseName ,QString username );
     //初始化系统数据库
 static bool initialDataBase();
-
+ void grantUser(QString username, QString dba,QString create,QString update,QString dele);
 static bool createUser(QString username, QString secret,QString dba,QString create,QString update,QString dele);
 static int userexist(QString username, QString secret);
 static bool checkDBA();
