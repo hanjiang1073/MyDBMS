@@ -1,6 +1,6 @@
 ﻿#include "registframe.h"
 #include "ui_registframe.h"
-
+#include "sql.h"
 RegistFrame::RegistFrame(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RegistFrame)
@@ -45,6 +45,8 @@ void RegistFrame::btn_confirm_clicked(){
     //如果该用户不存在，则注册写入用户表中
     if(result == 3){
         DFile().createUser(name,pw,dba,create,update,dele);
+        QString kuname="null",biaoname="null";
+        SQL().GrantU(name,kuname,biaoname,dba,create,update,dele);
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("该用户已存在！"));
     }
