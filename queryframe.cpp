@@ -19,9 +19,9 @@ void QueryFrame::showWidget(){
     ui->tableWidget->setHorizontalHeaderItem(0,new QTableWidgetItem(QStringLiteral("字段")));
     ui->tableWidget->setHorizontalHeaderItem(1,new QTableWidgetItem(QStringLiteral("值")));
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    qDebug()<<"query"<<biaoname<<kuname;
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    qDebug()<<"query"<<tablename<<databasename;
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tdf = dirname + '/' + tablename + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
     if(tdf.open(QIODevice::ReadOnly))

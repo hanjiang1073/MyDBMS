@@ -17,7 +17,7 @@ public:
 
     //表的详细日志
     static bool addTBRecord(int type, QString username, QString baseName, QString tbname, QString sql);
-    static bool writeFileTIC(QString user,QString kuname,QString biaoname,QString str);
+    static bool writeFileTIC(QString user,QString databasename,QString tablename,QString str);
 };
 
 

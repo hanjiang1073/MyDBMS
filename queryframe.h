@@ -19,10 +19,10 @@ public:
     ~QueryFrame();
     void showWidget();
     QString user;//当前用户
-    QString kuname;
-    QString biaoname;
-    QTreeWidgetItem *kuItem=NULL;
-    QTreeWidgetItem *biaoItem=NULL;
+    QString databasename;
+    QString tablename;
+    QTreeWidgetItem *databaseItem=NULL;
+    QTreeWidgetItem *tableItem=NULL;
 signals:
     void submit(QString);
 private:

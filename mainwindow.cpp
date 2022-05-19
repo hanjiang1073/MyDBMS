@@ -25,23 +25,26 @@ MainWindow::~MainWindow()
 //菜单栏创建(与槽函数连接)其他功能连接也在这进行
 //具体控件名字见.ui文件
 void MainWindow::createMenu(){
-    connect(ui->actionquit, &QAction::triggered, this, &MainWindow::on_actionExit_triggered);
-    connect(ui->actionxjk,&QAction::triggered,this,&MainWindow::on_actionXjk_triggered);    //新建库
-    connect(ui->actionxjb,&QAction::triggered,this,&MainWindow::on_actionXjb_triggered);    //新建表
-    connect(ui->actiondkk,&QAction::triggered,this,&MainWindow::on_actionDkk_triggered);    //打开库
-    connect(ui->actioncrd,&QAction::triggered,this,&MainWindow::on_actionCrd_triggered);    //插入字段
-    connect(ui->actioncrj,&QAction::triggered,this,&MainWindow::on_actionCrj_triggered);    //插入记录
-    connect(ui->actiondkb,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
-    connect(ui->actiontjc,&QAction::triggered,this,&MainWindow::on_actionTjc_triggered);    //条件查询
+    connect(ui->actionquit, &QAction::triggered, this, &MainWindow::actionExit);
+    connect(ui->actionCDatabase,&QAction::triggered,this,&MainWindow::createDatabase);    //新建库
+    connect(ui->actionCTable,&QAction::triggered,this,&MainWindow::createTable);    //新建表
+    connect(ui->actionODatabase,&QAction::triggered,this,&MainWindow::openDatabase);    //打开库
+    connect(ui->actionIField,&QAction::triggered,this,&MainWindow::insertField);    //插入字段
+    connect(ui->actionIRecord,&QAction::triggered,this,&MainWindow::insertRecord);    //插入记录
+    connect(ui->actionOTable,&QAction::triggered,this,&MainWindow::showRecord);                //打开表
+    connect(ui->actionQuery,&QAction::triggered,this,&MainWindow::queryRecord);    //条件查询
 //    connect(ui->tableWidget,SIGNAL(cellClicked(int,int)),this,SLOT(get_row_and_col(int,int)));
-    //    connect(ui->actionscd,&QAction::triggered,this,&MainWindow::on_actionscd_triggered);    //删除字段
-    //connect(ui->actionrizhi,&QAction::triggered,this,&MainWindow::on_actionrizhi_triggered);//日志查询
-    connect(ui->actionscj,&QAction::triggered,this,&MainWindow::on_actionScj_triggered);    //删除记录
-    connect(ui->actionxgj,&QAction::triggered,this,&MainWindow::on_actionXgj_triggered);    //修改记录
-    connect(ui->actionqx,&QAction::triggered,this,&MainWindow::on_actionQx_triggered);      //权限与安全
-    connect(ui->actioncky,&QAction::triggered,this,&MainWindow::on_actionCky_triggered);    //条件查询
-    connect(ui->actionsql,&QAction::triggered,this,&MainWindow::on_actionSql_triggered);    //导入sql
-    connect(ui->actionreload,&QAction::triggered,this,&MainWindow::on_actionReload_triggered);
+    connect(ui->actionDField,&QAction::triggered,this,&MainWindow::deleteField);    //删除字段
+    connect(ui->actionUField,&QAction::triggered,this,&MainWindow::updateField);    //修改字段
+    connect(ui->actionDDatabase,&QAction::triggered,this,&MainWindow::deleteDatabase);    //删除库
+    connect(ui->actionDTable,&QAction::triggered,this,&MainWindow::deleteTable);    //删除表
+    connect(ui->actionLog,&QAction::triggered,this,&MainWindow::systemLog);//日志查询
+    connect(ui->actionDRecord,&QAction::triggered,this,&MainWindow::deleteRecord);    //删除记录
+    connect(ui->actionURecord,&QAction::triggered,this,&MainWindow::updateRecord);    //修改记录
+    connect(ui->actionRight,&QAction::triggered,this,&MainWindow::controlRight);      //权限与安全
+    connect(ui->actionUserInfo,&QAction::triggered,this,&MainWindow::userInfo);    //查看用户
+    connect(ui->actionsql,&QAction::triggered,this,&MainWindow::actionSql);    //导入sql
+    connect(ui->actionreload,&QAction::triggered,this,&MainWindow::actionReload);
 }
 
 
@@ -55,18 +58,18 @@ void MainWindow::initall(QString name,QString dba,QString create,QString update,
     qDebug()<<dbaright<<createright<<updateright<<deleright;
     //根据各权限设置功能
     if(createright==false&&dbaright==false){
-        ui->actionxjk->setEnabled(false);
-        ui->actionxjb->setEnabled(false);
+        ui->actionCDatabase->setEnabled(false);
+        ui->actionCTable->setEnabled(false);
     }
     if(updateright==false&&dbaright==false){
-        ui->actionxgd->setEnabled(false);
-        ui->actionxgj->setEnabled(false);
+        ui->actionUField->setEnabled(false);
+        ui->actionURecord->setEnabled(false);
     }
     if(deleright==false&&dbaright==false){
-        ui->actionscb->setEnabled(false);
-        ui->actionscd->setEnabled(false);
-        ui->actionscj->setEnabled(false);
-        ui->actionsck->setEnabled(false);
+        ui->actionDRecord->setEnabled(false);
+        ui->actionDField->setEnabled(false);
+        ui->actionDRecord->setEnabled(false);
+        ui->actionDDatabase->setEnabled(false);
     }
 
     //TODO根据user名加载出这个用户已经存在的库、表
@@ -77,23 +80,23 @@ void MainWindow::initall(QString name,QString dba,QString create,QString update,
     names.removeOne("..");
     auto it=names.begin();
     while(it!=names.end()){
-        QString kuname=*it;
+        QString databasename=*it;
         //qDebug()<<*it<<endl;
-        on_actionXjk_triggered();
-        kuItem->setText(0,kuname);
-        hasht[kuItem]=1;
+        createDatabase();
+        databaseItem->setText(0,databasename);
+        hasht[databaseItem]=1;
 
-        QString biaodirname="D:/MyDataBase/"+ user+"/"+kuname;
+        QString biaodirname="D:/MyDataBase/"+ user+"/"+databasename;
         QDir biaodir(biaodirname);
-        QStringList biaonames = biaodir.entryList(QDir::Dirs);
-        biaonames.removeOne(".");
-        biaonames.removeOne("..");
-        auto biaoit=biaonames.begin();
-        while(biaoit!=biaonames.end()){
-            QString biaoname=*biaoit;
-            on_actionXjb_triggered();
-            biaoItem->setText(0,biaoname);
-            hasht[biaoItem]=1;
+        QStringList tablenames = biaodir.entryList(QDir::Dirs);
+        tablenames.removeOne(".");
+        tablenames.removeOne("..");
+        auto biaoit=tablenames.begin();
+        while(biaoit!=tablenames.end()){
+            QString tablename=*biaoit;
+            createTable();
+            tableItem->setText(0,tablename);
+            hasht[tableItem]=1;
             biaoit++;
         }
         it++;
@@ -102,7 +105,7 @@ void MainWindow::initall(QString name,QString dba,QString create,QString update,
 }
 
 //退出按钮槽函数
-void MainWindow::on_actionExit_triggered()
+void MainWindow::actionExit()
 {
     this->close();
 }
@@ -137,27 +140,27 @@ void MainWindow::createWidget(){
 /**
  * @brief 新建库槽函数
  */
-void MainWindow::on_actionXjk_triggered(){
+void MainWindow::createDatabase(){
     QTreeWidgetItem *Ku=new QTreeWidgetItem(ui->treeWidget);
     QIcon icon;
     icon.addPixmap(QPixmap(":/pic/Ku.png"), QIcon::Selected);
     Ku->setIcon(0,icon);
 
     Ku->setText(0,QStringLiteral("请输入名称"));
-    kuItem=Ku;
+    databaseItem=Ku;
 }
 
 /**
  * @brief 删除库
  */
-void MainWindow::on_actionsck_triggered(){
-    if(kuItem!=NULL){
-        QString dirname = "D:/MyDataBase/"+ user+'/' + kuname;
+void MainWindow::deleteDatabase(){
+    if(databaseItem!=NULL){
+        QString dirname = "D:/MyDataBase/"+ user+'/' + databasename;
         QDir dir;
         dir.setPath(dirname);
         dir.removeRecursively();
 
-        delete kuItem;
+        delete databaseItem;
         ui->tableWidget->setColumnCount(0);
         ui->tableWidget->setRowCount(0);
         ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -169,15 +172,15 @@ void MainWindow::on_actionsck_triggered(){
 /**
  * @brief 删除表
  */
-void MainWindow::on_actionscb_triggered(){
-    if(this->biaoItem!=NULL){
-        QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+void MainWindow::deleteTable(){
+    if(this->tableItem!=NULL){
+        QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
         QDir dir;
         dir.setPath(dirname);
         dir.removeRecursively();
 
-        delete biaoItem;
-        SQL().deleteT(user,kuname,biaoname);
+        delete tableItem;
+        SQL().deleteT(user,databasename,tablename);
         ui->tableWidget->setColumnCount(0);
         ui->tableWidget->setRowCount(0);
         ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -188,15 +191,15 @@ void MainWindow::on_actionscb_triggered(){
 }
 
 //新建表槽函数
-void MainWindow::on_actionXjb_triggered(){
-    if(kuItem!=NULL){
+void MainWindow::createTable(){
+    if(databaseItem!=NULL){
         QTreeWidgetItem *biao=new QTreeWidgetItem();
-        kuItem->addChild(biao);
+        databaseItem->addChild(biao);
         QIcon icon;
         icon.addPixmap(QPixmap(":/pic/biao.png"), QIcon::Selected);
         biao->setIcon(0,icon);
         biao->setText(0,QStringLiteral("请输入名称"));
-        biaoItem=biao;
+        tableItem=biao;
     }else{
         QMessageBox::information(this,QStringLiteral("提示"),QStringLiteral("请先选择库!"));
     }
@@ -204,12 +207,12 @@ void MainWindow::on_actionXjb_triggered(){
 }
 
 //插入字段槽函数
-void MainWindow::on_actionCrd_triggered(){
-    if(this->biaoItem!=NULL){
+void MainWindow::insertField(){
+    if(this->tableItem!=NULL){
         td=new TableDesign();
-        td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
-        td->kuname=this->kuname;
-        td->biaoname=this->biaoname;
+        td->tableItem=this->tableItem;//传递选中的表指针以便存值
+        td->databasename=this->databasename;
+        td->tablename=this->tablename;
         td->user=this->user;
         td->show();
         showTableWidget();
@@ -220,13 +223,13 @@ void MainWindow::on_actionCrd_triggered(){
 }
 
 //插入记录
-void MainWindow::on_actionCrj_triggered(){
-    if(this->biaoItem!=NULL){
+void MainWindow::insertRecord(){
+    if(this->tableItem!=NULL){
         ri=new RecordInsert();
-        ri->biaoItem=this->biaoItem;
-        ri->biaoname=this->biaoItem->text(0);
-        ri->kuItem=this->biaoItem->parent();
-        ri->kuname=this->biaoItem->parent()->text(0);
+        ri->tableItem=this->tableItem;
+        ri->tablename=this->tableItem->text(0);
+        ri->databaseItem=this->tableItem->parent();
+        ri->databasename=this->tableItem->parent()->text(0);
         ri->user=this->user;
         ri->initTableWidget();
         ri->show();
@@ -236,24 +239,24 @@ void MainWindow::on_actionCrj_triggered(){
 }
 
 //删除记录
-void MainWindow::on_actionScj_triggered(){
+void MainWindow::deleteRecord(){
     if(recordTable==true){
-         SQL().deleteRecord(this->user,this->kuname,this->biaoname,this->recordRow);
-         TFile().deleteRecord(user,kuname,biaoname,recordRow);
+         SQL().deleteRecord(this->user,this->databasename,this->tablename,this->recordRow);
+         TFile().deleteRecord(user,databasename,tablename,recordRow);
     }else{
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择记录!"));
     }
 }
 
 //修改记录
-void MainWindow::on_actionXgj_triggered(){
+void MainWindow::updateRecord(){
     if(recordTable==true){
-        on_actionScj_triggered();
+        deleteRecord();
         ri=new RecordInsert();
-        ri->biaoItem=this->biaoItem;
-        ri->biaoname=this->biaoItem->text(0);
-        ri->kuItem=this->biaoItem->parent();
-        ri->kuname=this->biaoItem->parent()->text(0);
+        ri->tableItem=this->tableItem;
+        ri->tablename=this->tableItem->text(0);
+        ri->databaseItem=this->tableItem->parent();
+        ri->databasename=this->tableItem->parent()->text(0);
         ri->user=this->user;
         ri->changeLabel(QStringLiteral("修改记录"));
         ri->initTableWidget();
@@ -294,20 +297,20 @@ void MainWindow::slotFinishEdit(){
 
             doubleClickItem->setText(0,text);
             //创建库
-            if(doubleClickItem==kuItem)
+            if(doubleClickItem==databaseItem)
             {
-                kuname=text;
+                databasename=text;
                  //DFile::createDataBase(text,this->user);
-                 SQL().CreateD(this->user,kuname);
+                 SQL().CreateD(this->user,databasename);
                  DFile().addRecord(1,user,text);
             }
             //创建表
-            if(doubleClickItem==biaoItem)
+            if(doubleClickItem==tableItem)
             {
-                 biaoname=text;
-                 //TFile::createTable(this->user,kuname,text);
-                 SQL().CreateT(this->user,this->kuname,this->biaoname);
-                 DFile().addDBRecord(1,this->user,kuname,text);
+                 tablename=text;
+                 //TFile::createTable(this->user,databasename,text);
+                 SQL().CreateT(this->user,this->databasename,this->tablename);
+                 DFile().addDBRecord(1,this->user,databasename,text);
             }
             QMessageBox::StandardButton button;
             button = QMessageBox::question(this, QStringLiteral("提示"), QStringLiteral("名称无法修改，确定此名？") ,QMessageBox::Yes | QMessageBox::No);
@@ -323,19 +326,19 @@ void MainWindow::slotClickItem(QTreeWidgetItem *item,int col){
     QTreeWidgetItem *p=NULL;
     p=item->parent();
     if(p!=NULL){
-       biaoItem=item;
-       kuname=item->parent()->text(0);
-       biaoname=item->text(0);
-      // biaoname=biaoItem->text(0);
-       kuItem=NULL;
+       tableItem=item;
+       databasename=item->parent()->text(0);
+       tablename=item->text(0);
+      // tablename=tableItem->text(0);
+       databaseItem=NULL;
         //如果说单击的这个item不是根节点即不是库，是表那么就显示其设计界面
        showTableWidget();
     }else{
-        kuItem=item;
-        biaoname="";
-        kuname=item->text(0);
-        // kuname=kuItem->text(col);
-         biaoItem=NULL;
+        databaseItem=item;
+        tablename="";
+        databasename=item->text(0);
+        // databasename=databaseItem->text(col);
+         tableItem=NULL;
     }
 }
 
@@ -353,9 +356,9 @@ void MainWindow::slotClickTableItem(int row,int column){
 }
 
 //展开库
-void MainWindow::on_actionDkk_triggered(){
-    if(kuItem!=NULL){
-        kuItem->setExpanded(1);
+void MainWindow::openDatabase(){
+    if(databaseItem!=NULL){
+        databaseItem->setExpanded(1);
     }
 }
 
@@ -382,8 +385,8 @@ void MainWindow::showTableWidget(){
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 //TODO下面读取字段信息
 
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tdf = dirname + '/' + tablename + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
     if(tdf.open(QIODevice::ReadOnly))
@@ -433,8 +436,8 @@ qDebug()<<"进入循环了！";
 /**
  * @brief 删除字段
  */
-void MainWindow::on_actionscd_triggered(){
-    if(this->biaoItem!=NULL){
+void MainWindow::deleteField(){
+    if(this->tableItem!=NULL){
 
         if(tableRow==-1)
         {
@@ -442,10 +445,10 @@ void MainWindow::on_actionscd_triggered(){
         }
         else
         {
-            SQL().deleteField(user,kuname,biaoname,ui->tableWidget->item(tableRow,0)->text());
-            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
+            SQL().deleteField(user,databasename,tablename,ui->tableWidget->item(tableRow,0)->text());
+            QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
             //删除记录中该字段
-            QString filename_tic = dirname + '/' + biaoname + ".tic";
+            QString filename_tic = dirname + '/' + tablename + ".tic";
             QFile tic(filename_tic);
             if(tic.open(QIODevice::ReadOnly))
             {
@@ -479,7 +482,7 @@ void MainWindow::on_actionscd_triggered(){
             wtic.close();
 
             //删除字段
-            QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+            QString filename_tdf = dirname + '/' + tablename + ".tdf";
             QFile tdf(filename_tdf);
             if(tdf.open(QIODevice::ReadOnly))
             {
@@ -527,15 +530,15 @@ void MainWindow::on_actionscd_triggered(){
 /**
  * @brief 修改字段
  */
-void MainWindow::on_actionxgd_triggered(){
-    if(this->biaoItem!=NULL){
+void MainWindow::updateField(){
+    if(this->tableItem!=NULL){
         if(tableRow==-1)
         {
             QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择要修改的字段!"));
         }else
         {
-            QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-            QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+            QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+            QString filename_tdf = dirname + '/' + tablename + ".tdf";
             QFile tdf(filename_tdf);
 
             if(tdf.open(QIODevice::ReadOnly))
@@ -558,9 +561,9 @@ void MainWindow::on_actionxgd_triggered(){
 qDebug()<<"修改前的str："<<str;
                     str1=str.split("|").at(0);//用于sql语句生成
                     td=new TableDesign();
-                    td->biaoItem=this->biaoItem;//传递选中的表指针以便存值
-                    td->kuname=this->kuname;
-                    td->biaoname=this->biaoname;
+                    td->tableItem=this->tableItem;//传递选中的表指针以便存值
+                    td->databasename=this->databasename;
+                    td->tablename=this->tablename;
                     td->user=this->user;
                     td->willModify(str);
                     td->show();
@@ -571,7 +574,7 @@ qDebug()<<"修改前的str："<<str;
                     }
                     str=td->modifystr;
                     //生成sql
-                    SQL().ModifyDesign(user,kuname,biaoname,ui->tableWidget->item(tableRow,0)->text(),str);
+                    SQL().ModifyDesign(user,databasename,tablename,ui->tableWidget->item(tableRow,0)->text(),str);
 qDebug()<<"修改后的str："<<str;
                 }
                 strlist.append(str);
@@ -607,14 +610,14 @@ qDebug()<<"修改后的str："<<str;
 //打开表
 void MainWindow::showRecord(){
     recordTable=true;
-    if(biaoname==""){
+    if(tablename==""){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表!"));
     }
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tdf = dirname + '/' + tablename + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
     if(tdf.open(QIODevice::ReadOnly))
@@ -640,8 +643,8 @@ void MainWindow::showRecord(){
     }
     tdf.close();
 
-    QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = recdir + '/' + biaoname + ".tic";
+    QString recdir = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = recdir + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.seek(0);
     if(tic.open(QIODevice::ReadOnly))
@@ -670,13 +673,13 @@ void MainWindow::showRecord(){
 }
 
 //条件查询
-void MainWindow::on_actionTjc_triggered(){
+void MainWindow::queryRecord(){
     QueryFrame *qf=new QueryFrame();
     qf->user=this->user;
-    qf->biaoItem=this->biaoItem;
-    qf->kuItem=this->kuItem;
-    qf->biaoname=this->biaoname;
-    qf->kuname=this->kuname;
+    qf->tableItem=this->tableItem;
+    qf->databaseItem=this->databaseItem;
+    qf->tablename=this->tablename;
+    qf->databasename=this->databasename;
     qf->show();
     qf->showWidget();
     connect(qf,SIGNAL(submit(QString)),this,SLOT(forTjc(QString)));
@@ -684,15 +687,21 @@ void MainWindow::on_actionTjc_triggered(){
 
 //条件查询的配套函数
 void MainWindow::forTjc(QString values){
+    if(values==""){
+        ui->tableWidget->setColumnCount(0);
+        ui->tableWidget->setRowCount(0);
+        ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        return;
+    }
     qDebug()<<values;
     QStringList valueList;
     valueList=values.split("|");//查询的字段及相应信息
-    if(biaoItem==NULL&&valueList[0]!="sql"){
+    if(tableItem==NULL&&valueList[0]!="sql"){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("请先选择表！"));
     }
     if(valueList[0]=="sql"){
-        kuname=valueList[1];
-        biaoname=valueList[2];
+        databasename=valueList[1];
+        tablename=valueList[2];
         //去除表头
         valueList.pop_front();
         valueList.pop_front();
@@ -712,8 +721,8 @@ void MainWindow::forTjc(QString values){
     ui->tableWidget->setColumnCount(0);
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tdf = dirname + '/' + tablename + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
     if(tdf.open(QIODevice::ReadOnly))
@@ -747,8 +756,8 @@ void MainWindow::forTjc(QString values){
 
 
     //将记录写入表
-    QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = rdirname + '/' + biaoname + ".tic";
+    QString rdirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = rdirname + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.seek(0);
     if(tic.open(QIODevice::ReadOnly))
@@ -837,7 +846,7 @@ void MainWindow::forTjc(QString values){
 }
 
 //日志查询
-void MainWindow::on_actionrizhi_triggered()
+void MainWindow::systemLog()
 {
    blogFrame* blog = new blogFrame();
    blog->setUser(this->user);
@@ -851,7 +860,7 @@ void MainWindow::on_actionrizhi_triggered()
 }
 
 //权限与安全
-void MainWindow::on_actionQx_triggered(){
+void MainWindow::controlRight(){
     if(dbaright==false){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("不是管理员无法设置权限!"));
     }else{
@@ -872,24 +881,24 @@ void MainWindow::changeRight(bool dba,bool create,bool update,bool dele){
     deleright=dele;
     //根据各权限设置功能
     if(createright==false&&dbaright==false){
-        ui->actionxjk->setEnabled(false);
-        ui->actionxjb->setEnabled(false);
+        ui->actionCDatabase->setEnabled(false);
+        ui->actionCTable->setEnabled(false);
     }
     if(updateright==false&&dbaright==false){
-        ui->actionxgd->setEnabled(false);
-        ui->actionxgj->setEnabled(false);
+        ui->actionUField->setEnabled(false);
+        ui->actionURecord->setEnabled(false);
     }
     if(deleright==false&&dbaright==false){
-        ui->actionscb->setEnabled(false);
-        ui->actionscd->setEnabled(false);
-        ui->actionscj->setEnabled(false);
-        ui->actionsck->setEnabled(false);
+        ui->actionDRecord->setEnabled(false);
+        ui->actionDField->setEnabled(false);
+        ui->actionDRecord->setEnabled(false);
+        ui->actionDDatabase->setEnabled(false);
     }
 
 }
 
 //查看当前用户的权限
-void MainWindow::on_actionCky_triggered(){
+void MainWindow::userInfo(){
     std::string str;
     str+="当前用户名:"+user.toStdString()+"\n";
     str+="所有权限:";
@@ -909,7 +918,7 @@ void MainWindow::on_actionCky_triggered(){
 }
 
 //sql导入
-void MainWindow::on_actionSql_triggered(){
+void MainWindow::actionSql(){
     SqlInput *si=new SqlInput();
     si->user=user;
     si->show();
@@ -919,7 +928,7 @@ void MainWindow::on_actionSql_triggered(){
 }
 
 //重新加载
-void MainWindow::on_actionReload_triggered(){
+void MainWindow::actionReload(){
     ui->treeWidget->clear();
     QString dirname="D:/MyDataBase/"+ user;
     QDir dir(dirname);
@@ -928,23 +937,23 @@ void MainWindow::on_actionReload_triggered(){
     names.removeOne("..");
     auto it=names.begin();
     while(it!=names.end()){
-        QString kuname=*it;
+        QString databasename=*it;
         //qDebug()<<*it<<endl;
-        on_actionXjk_triggered();
-        kuItem->setText(0,kuname);
-        hasht[kuItem]=1;
+        createDatabase();
+        databaseItem->setText(0,databasename);
+        hasht[databaseItem]=1;
 
-        QString biaodirname="D:/MyDataBase/"+ user+"/"+kuname;
+        QString biaodirname="D:/MyDataBase/"+ user+"/"+databasename;
         QDir biaodir(biaodirname);
-        QStringList biaonames = biaodir.entryList(QDir::Dirs);
-        biaonames.removeOne(".");
-        biaonames.removeOne("..");
-        auto biaoit=biaonames.begin();
-        while(biaoit!=biaonames.end()){
-            QString biaoname=*biaoit;
-            on_actionXjb_triggered();
-            biaoItem->setText(0,biaoname);
-            hasht[biaoItem]=1;
+        QStringList tablenames = biaodir.entryList(QDir::Dirs);
+        tablenames.removeOne(".");
+        tablenames.removeOne("..");
+        auto biaoit=tablenames.begin();
+        while(biaoit!=tablenames.end()){
+            QString tablename=*biaoit;
+            createTable();
+            tableItem->setText(0,tablename);
+            hasht[tableItem]=1;
             biaoit++;
         }
         it++;

@@ -18,10 +18,10 @@ public:
     explicit RecordInsert(QWidget *parent = nullptr);
     ~RecordInsert();
     QString user;//当前用户
-    QString kuname;
-    QString biaoname;
-    QTreeWidgetItem *kuItem=NULL;
-    QTreeWidgetItem *biaoItem=NULL;
+    QString databasename;
+    QString tablename;
+    QTreeWidgetItem *databaseItem=NULL;
+    QTreeWidgetItem *tableItem=NULL;
     std::vector<int>pks;//记录主键的字段
     void initTableWidget();//初始化界面
     void writeFile(QString str);//写入文件

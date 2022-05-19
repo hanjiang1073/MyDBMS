@@ -6,10 +6,10 @@ TFile::TFile()
 
 }
 
-bool TFile::deleteRecord(QString user, QString kuname, QString biaoname, int recordRow)
+bool TFile::deleteRecord(QString user, QString databasename, QString tablename, int recordRow)
 {
-    QString recdir = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = recdir + '/' + biaoname + ".tic";
+    QString recdir = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = recdir + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.seek(0);
     if(tic.open(QIODevice::ReadOnly))
@@ -68,9 +68,9 @@ qDebug()<<name+"|"+type+"|"+len+"|"+def+"|"+min+"|"+max+"|"+pk1+"|"+un1+"|"+non1
 }
 
 //写入tic文件
-bool TFile::writeFileTIC(QString user,QString kuname,QString biaoname,QString str){
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = dirname + '/' + biaoname + ".tic";
+bool TFile::writeFileTIC(QString user,QString databasename,QString tablename,QString str){
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = dirname + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.open(QIODevice::Append);
     QDataStream stream (&tic);

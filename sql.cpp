@@ -20,14 +20,14 @@ void SQL::GrantU(QString user,QString dba, QString create, QString update, QStri
         str+="update ";
     }
     if(dele=="1"){
-        str+="dele ";
+        str+="delete ";
     }
     str=str+"to "+user;
     this->Logic(str,user,"NULL","NUNLL");
 }
 
 //修改字段
-void SQL::ModifyDesign(QString user, QString kuname, QString biaoname,QString prevname, QString str2)
+void SQL::ModifyDesign(QString user, QString databasename, QString tablename,QString prevname, QString str2)
 {
 
     QStringList strs=str2.split("|");
@@ -41,7 +41,7 @@ void SQL::ModifyDesign(QString user, QString kuname, QString biaoname,QString pr
     bool un=strs[7]=="1"?true:false;
     bool non=strs[8]=="1"?true:false;
     QString com=strs[9];
-    QString str="alter table "+biaoname+" update field "+prevname+" into name:"+name+" type:"+type;
+    QString str="alter table "+tablename+" update field "+prevname+" into name:"+name+" type:"+type;
     if(len!="NULL"){
         str+=" length:"+len;
     }
@@ -68,56 +68,56 @@ void SQL::ModifyDesign(QString user, QString kuname, QString biaoname,QString pr
     if(com!="NULL"){
         str+=" comment:"+com;
     }
-    this->Logic(str,user,kuname,biaoname);
+    this->Logic(str,user,databasename,tablename);
 }
 
 //创建表
-void SQL::CreateT(QString user,QString kuname ,QString biaoname)
+void SQL::CreateT(QString user,QString databasename ,QString tablename)
 {
-    QString str="create table "+biaoname;//生成语句
-      this->Logic(str,user,kuname,biaoname);
+    QString str="create table "+tablename;//生成语句
+      this->Logic(str,user,databasename,tablename);
 }
 
 //删除字段
-void SQL::deleteField(QString user, QString kuname, QString biaoname, QString name){
-    QString str="delete fields "+name+" on table "+biaoname;
-    this->Logic(str,user,kuname,biaoname);
+void SQL::deleteField(QString user, QString databasename, QString tablename, QString name){
+    QString str="delete fields "+name+" on table "+tablename;
+    this->Logic(str,user,databasename,tablename);
 }
 
 //删除记录
-void SQL::deleteRecord(QString user, QString kuname, QString biaoname, int row){
-    QString str="delete table "+biaoname+" where row= "+ QString::number(row);
-    this->Logic(str,user,kuname,biaoname);
+void SQL::deleteRecord(QString user, QString databasename, QString tablename, int row){
+    QString str="delete table "+tablename+" where row= "+ QString::number(row);
+    this->Logic(str,user,databasename,tablename);
 }
 
 //删除表
-void SQL::deleteT(QString user, QString kuname, QString biaoname)
+void SQL::deleteT(QString user, QString databasename, QString tablename)
 {
-     QString str="drop table "+biaoname;
-      this->Logic(str,user,kuname,biaoname);
+     QString str="drop table "+tablename;
+      this->Logic(str,user,databasename,tablename);
 }
 //插入记录
-void SQL::InsertT(QString user,QString kuname ,QString biaoname,QString str2/*表记录语句*/)
+void SQL::InsertT(QString user,QString databasename ,QString tablename,QString str2/*表记录语句*/)
 {
-    QString str="insert into table "+biaoname+" "+str2;
-    this->Logic(str,user,kuname,biaoname);
-//    RecordInsert().writeFile(str2,user,kuname,biaoname);
+    QString str="insert into table "+tablename+" "+str2;
+    this->Logic(str,user,databasename,tablename);
+//    RecordInsert().writeFile(str2,user,databasename,tablename);
 
 }
 
 //创建库
-void SQL::CreateD(QString user,QString kuname)
+void SQL::CreateD(QString user,QString databasename)
 {
-    QString biaoname;
-   QString str="create database "+kuname;
-   this->Logic(str,user,kuname,biaoname);
+    QString tablename;
+   QString str="create database "+databasename;
+   this->Logic(str,user,databasename,tablename);
 
 }
 
-void SQL::CreateU(QString user,QString kuname)
+void SQL::CreateU(QString user,QString databasename)
 {
-    QString dirname = "D:/MyDataBase/"+user+"/" + kuname;
-       QString filename2 =dirname+'/'+kuname +".log";
+    QString dirname = "D:/MyDataBase/"+user+"/" + databasename;
+       QString filename2 =dirname+'/'+databasename +".log";
        QFile logf(filename2);
         QDataStream stream1(&logf);
        QString str="create table "+user+";";
@@ -126,9 +126,9 @@ void SQL::CreateU(QString user,QString kuname)
 }
 
 //插入字段的sql语句
-void SQL::TDesign(QString user,QString kuname, QString biaoname, QString name, QString type, QString len, QString def, QString mins, QString maxs, bool pk, bool un, bool non, QString com)//向表插入字段
+void SQL::TDesign(QString user,QString databasename, QString tablename, QString name, QString type, QString len, QString def, QString mins, QString maxs, bool pk, bool un, bool non, QString com)//向表插入字段
 {   
-    QString str="alter table "+biaoname+" "+name+" type:"+type;
+    QString str="alter table "+tablename+" "+name+" type:"+type;
     if(len!="NULL"){
         str+=" length:"+len;
     }
@@ -155,13 +155,13 @@ void SQL::TDesign(QString user,QString kuname, QString biaoname, QString name, Q
     if(com!="NULL"){
         str+=" comment:"+com;
     }
-    this->Logic(str,user,kuname,biaoname);//解析sql语句
-    TFile().tabledesign(user,kuname,biaoname,name,type,len,def,mins,maxs,pk,un,non,com);
+    this->Logic(str,user,databasename,tablename);//解析sql语句
+    TFile().tabledesign(user,databasename,tablename,name,type,len,def,mins,maxs,pk,un,non,com);
 
 
 }
 //解析SQL语句
-void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
+void SQL::Logic(QString sql,QString user,QString databasename,QString tablename)
    {
        QDateTime dateTime= QDateTime::currentDateTime();//获取系统当前的时间
        QString str1 = dateTime.toString("yyyy-MM-dd hh:mm:ss");//格式化时间
@@ -172,8 +172,8 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        {
            if (list[1]=="table") {
 
-                TFile().createTable(user,kuname,list[2]);
-                QString logName = "D:/MyDataBase/" + user + "/" + kuname +"/" +biaoname+"/"+biaoname + ".trd";
+                TFile().createTable(user,databasename,list[2]);
+                QString logName = "D:/MyDataBase/" + user + "/" + databasename +"/" +tablename+"/"+tablename + ".trd";
                 QFile log (logName);
                 log.open(QIODevice::Append);
                 QDataStream stream (&log);
@@ -182,8 +182,8 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
               }
            if (list[1]=="database") {
 
-                 DFile().createDataBase(kuname,user);
-                 QString filename = "D:/MyDataBase/" + user + "/" + kuname +"/" +kuname + ".log";
+                 DFile().createDataBase(databasename,user);
+                 QString filename = "D:/MyDataBase/" + user + "/" + databasename +"/" +databasename + ".log";
                     QFile logf(filename);
                     bool logo = logf.open(QIODevice::ReadWrite);
                      QDataStream stream1(&logf);
@@ -209,7 +209,7 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        {
 //         QString vaules=list[9];
 //         QString name=list[6];
-         QString logName = "D:/MyDataBase/" + user + "/" + kuname +"/" +biaoname+"/" +biaoname+ ".trd";
+         QString logName = "D:/MyDataBase/" + user + "/" + databasename +"/" +tablename+"/" +tablename+ ".trd";
          QFile log (logName);
          log.open(QIODevice::Append);
          QDataStream stream (&log);
@@ -221,7 +221,7 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        {
             if(list[3]=="rename")
             {
-                QString logName = "D:/MyDataBase/" + user+ "/" + kuname +"/" +biaoname+"/" +biaoname  + ".trd";
+                QString logName = "D:/MyDataBase/" + user+ "/" + databasename +"/" +tablename+"/" +tablename  + ".trd";
                            QFile log (logName);
                            log.open(QIODevice::Append);
                            QDataStream stream (&log);
@@ -229,7 +229,7 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
                            log.close();
             }
            else
-            {QString logName = "D:/MyDataBase/" + user+ "/" + kuname +"/" +biaoname+"/" +biaoname  + ".trd";
+            {QString logName = "D:/MyDataBase/" + user+ "/" + databasename +"/" +tablename+"/" +tablename  + ".trd";
            QFile log (logName);
            log.open(QIODevice::Append);
            QDataStream stream (&log);
@@ -240,7 +240,7 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        }
        else if(list[0]=="drop")
        {
-           QString logName = "D:/MyDataBase/" + user + "/" + kuname +"/" +kuname + ".log";
+           QString logName = "D:/MyDataBase/" + user + "/" + databasename +"/" +databasename + ".log";
            QFile log (logName);
            log.open(QIODevice::Append);
            QDataStream stream (&log);
@@ -249,7 +249,7 @@ void SQL::Logic(QString sql,QString user,QString kuname,QString biaoname)
        }
        else if(list[0]=="delete")
        {
-           QString logName = "D:/MyDataBase/" + user+ "/" + kuname +"/" +biaoname+"/" +biaoname  + ".trd";
+           QString logName = "D:/MyDataBase/" + user+ "/" + databasename +"/" +tablename+"/" +tablename  + ".trd";
            QFile log (logName);
            log.open(QIODevice::Append);
            QDataStream stream (&log);

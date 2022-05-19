@@ -62,7 +62,7 @@ void TableDesign::on_button_confirm(){
     if(ui->nameEdit->text()==""){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("字段名称不能为空！"));
     }else{
-        //TODO将字段信息写入文件,根据属性user，biaoItem指向的是插入字段的那张表存的时候需要使用
+        //TODO将字段信息写入文件,根据属性user，tableItem指向的是插入字段的那张表存的时候需要使用
         QString str1=ui->nameEdit->text();
         QString str2=ui->comEdit->toPlainText();
         QString str3=ui->lenEdit->text();
@@ -96,10 +96,10 @@ void TableDesign::on_button_confirm(){
         }
 
         qDebug()<<"t1,t2,t3"<<t1<<t2<<t3;
-        //TFile::tabledesign(this->user,this->kuname,this->biaoItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+        //TFile::tabledesign(this->user,this->databasename,this->tableItem->text(0),str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
         if(!isModify)//添加字段
         {
-            SQL().TDesign(this->user,this->kuname,this->biaoname,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
+            SQL().TDesign(this->user,this->databasename,this->tablename,str1,str7,str3,str4,str5,str6,t1,t2,t3,str2);
         }else       //修改字段
         {
             QString pk= QString::number(t1);

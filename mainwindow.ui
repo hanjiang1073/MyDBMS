@@ -53,8 +53,8 @@
     <property name="title">
      <string>系统(S)</string>
     </property>
-    <addaction name="actioncky"/>
-    <addaction name="actionrizhi"/>
+    <addaction name="actionUserInfo"/>
+    <addaction name="actionLog"/>
     <addaction name="actionreload"/>
     <addaction name="actionquit"/>
    </widget>
@@ -62,9 +62,9 @@
     <property name="title">
      <string>数据库(K)</string>
     </property>
-    <addaction name="actionxjk"/>
-    <addaction name="actiondkk"/>
-    <addaction name="actionsck"/>
+    <addaction name="actionCDatabase"/>
+    <addaction name="actionODatabase"/>
+    <addaction name="actionDDatabase"/>
    </widget>
    <widget class="QMenu" name="menu_B">
     <property name="title">
@@ -74,29 +74,29 @@
      <property name="title">
       <string>设计表(S)</string>
      </property>
-     <addaction name="actioncrd"/>
-     <addaction name="actionxgd"/>
-     <addaction name="actionscd"/>
+     <addaction name="actionIField"/>
+     <addaction name="actionUField"/>
+     <addaction name="actionDField"/>
     </widget>
-    <addaction name="actionxjb"/>
+    <addaction name="actionCTable"/>
     <addaction name="menu_S_2"/>
-    <addaction name="actiondkb"/>
-    <addaction name="actionscb"/>
+    <addaction name="actionOTable"/>
+    <addaction name="actionDTable"/>
    </widget>
    <widget class="QMenu" name="menu_Q">
     <property name="title">
      <string>记录(R)</string>
     </property>
-    <addaction name="actiontjc"/>
-    <addaction name="actioncrj"/>
-    <addaction name="actionxgj"/>
-    <addaction name="actionscj"/>
+    <addaction name="actionQuery"/>
+    <addaction name="actionIRecord"/>
+    <addaction name="actionURecord"/>
+    <addaction name="actionDRecord"/>
    </widget>
    <widget class="QMenu" name="menu_U">
     <property name="title">
      <string>用户(U)</string>
     </property>
-    <addaction name="actionqx"/>
+    <addaction name="actionRight"/>
    </widget>
    <widget class="QMenu" name="menu_H">
     <property name="title">
@@ -119,12 +119,12 @@
    <addaction name="menu_H"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actioncky">
+  <action name="actionUserInfo">
    <property name="text">
     <string>查看用户(U)</string>
    </property>
   </action>
-  <action name="actionrizhi">
+  <action name="actionLog">
    <property name="text">
     <string>系统日志(R)</string>
    </property>
@@ -137,77 +137,77 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionxjk">
+  <action name="actionCDatabase">
    <property name="text">
     <string>新建库(N)</string>
    </property>
   </action>
-  <action name="actiondkk">
+  <action name="actionODatabase">
    <property name="text">
     <string>打开库(O)</string>
    </property>
   </action>
-  <action name="actionsck">
+  <action name="actionDDatabase">
    <property name="text">
     <string>删除库(D)</string>
    </property>
   </action>
-  <action name="actionxjb">
+  <action name="actionCTable">
    <property name="text">
     <string>新建表(N)</string>
    </property>
   </action>
-  <action name="actiondkb">
+  <action name="actionOTable">
    <property name="text">
     <string>打开表(O)</string>
    </property>
   </action>
-  <action name="actionscb">
+  <action name="actionDTable">
    <property name="text">
     <string>删除表(D)</string>
    </property>
   </action>
-  <action name="actioncrd">
+  <action name="actionIField">
    <property name="text">
     <string>插入字段(I)</string>
    </property>
   </action>
-  <action name="actionckd">
+  <action name="actionOField">
    <property name="text">
     <string>查看字段(L)</string>
    </property>
   </action>
-  <action name="actionxgd">
+  <action name="actionUField">
    <property name="text">
     <string>修改字段(U)</string>
    </property>
   </action>
-  <action name="actionscd">
+  <action name="actionDField">
    <property name="text">
     <string>删除字段(D)</string>
    </property>
   </action>
-  <action name="actiontjc">
+  <action name="actionQuery">
    <property name="text">
     <string>条件查询(S)</string>
    </property>
   </action>
-  <action name="actioncrj">
+  <action name="actionIRecord">
    <property name="text">
     <string>插入记录(I)</string>
    </property>
   </action>
-  <action name="actionxgj">
+  <action name="actionURecord">
    <property name="text">
     <string>修改记录(U)</string>
    </property>
   </action>
-  <action name="actionscj">
+  <action name="actionDRecord">
    <property name="text">
     <string>删除记录(D)</string>
    </property>
   </action>
-  <action name="actionqx">
+  <action name="actionRight">
    <property name="text">
     <string>权限与安全(R)</string>
    </property>

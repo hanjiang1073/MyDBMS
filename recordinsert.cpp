@@ -30,8 +30,8 @@ void RecordInsert::initTableWidget(){
     ui->tableWidget->setHorizontalHeaderItem(8,new QTableWidgetItem(QStringLiteral("非空")));
     ui->tableWidget->setHorizontalHeaderItem(9,new QTableWidgetItem(QStringLiteral("值")));
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tdf = dirname + '/' + biaoname + ".tdf";
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tdf = dirname + '/' + tablename + ".tdf";
     QFile tdf(filename_tdf);
     tdf.seek(0);
     if(tdf.open(QIODevice::ReadOnly))
@@ -82,8 +82,8 @@ void RecordInsert::initTableWidget(){
 
 //写入文件
 void RecordInsert::writeFile(QString str){
-    QString dirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = dirname + '/' + biaoname + ".tic";
+    QString dirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = dirname + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.open(QIODevice::Append);
     QDataStream stream (&tic);
@@ -237,7 +237,7 @@ void RecordInsert::on_button_confirm(){
     }
     if(flag==1){
         QMessageBox::information(this, QStringLiteral("提示"),QStringLiteral("插入成功！"));
-        SQL().InsertT(user,kuname,biaoname,str);//在此生成SQL语句
+        SQL().InsertT(user,databasename,tablename,str);//在此生成SQL语句
         writeFile(str);
     }else{
         qDebug()<<"wrongRow"<<wrongRow;
@@ -285,8 +285,8 @@ bool RecordInsert::checkdigit(std::string svalue){
 
 //判断你是否唯一
 bool RecordInsert::checkUnique(QString value,int row){
-    QString rdirname = "D:/MyDataBase/"+ user+'/' + kuname+'/'+biaoname;
-    QString filename_tic = rdirname + '/' + biaoname + ".tic";
+    QString rdirname = "D:/MyDataBase/"+ user+'/' + databasename+'/'+tablename;
+    QString filename_tic = rdirname + '/' + tablename + ".tic";
     QFile tic(filename_tic);
     tic.seek(0);
     if(tic.open(QIODevice::ReadOnly))
